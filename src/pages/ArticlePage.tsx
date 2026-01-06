@@ -10,7 +10,7 @@ import {
   articles
 } from '../data/articles';
 import { updateArticleViews } from '../lib/viewCounter';
-import { Calendar, Eye, ArrowLeft, MessageCircle, Send, ChevronLeft, ChevronRight, Share2, Facebook, Twitter, Linkedin, Link2, Check } from 'lucide-react';
+import { Calendar, Eye, ArrowLeft, MessageCircle, Send, ChevronLeft, ChevronRight, Share2, Facebook, Dribbble, Twitter, Instagram, Linkedin, Link2, Check } from 'lucide-react';
 import ArticleContent from '../components/ArticleContent';
 import { generateArticleSchema } from '../utils/schemaGenerator';
 
@@ -57,6 +57,16 @@ export default function ArticlePage({ onNavigate }: ArticlePageProps) {
   const shareToLinkedIn = () => {
     const url = encodeURIComponent(window.location.href);
     window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+  };
+
+  const shareToInstagram = () => {
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://www.instagram.com/?url=${url}`, '_blank');
+  };
+
+  const shareToDribbble = () => {
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://dribbble.com/shots/new?url=${url}`, '_blank');
   };
 
   const getTruncatedUrl = () => {
@@ -354,7 +364,7 @@ export default function ArticlePage({ onNavigate }: ArticlePageProps) {
                     className="flex items-center gap-2 bg-slate-900/50 hover:bg-sky-500 text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-blue-500/20 hover:border-sky-500/50"
                   >
                     <Twitter className="w-4 h-4" />
-                    <span className="text-sm font-semibold">Twitter</span>
+                    <span className="text-sm font-semibold">X</span>
                   </button>
 
                   <button
@@ -363,6 +373,22 @@ export default function ArticlePage({ onNavigate }: ArticlePageProps) {
                   >
                     <Linkedin className="w-4 h-4" />
                     <span className="text-sm font-semibold">LinkedIn</span>
+                  </button>
+
+                  <button
+                    onClick={shareToDribbble}
+                    className="flex items-center gap-2 bg-slate-900/50 hover:bg-blue-700 text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-blue-500/20 hover:border-blue-700/50"
+                  >
+                    <Dribbble className="w-4 h-4" />
+                    <span className="text-sm font-semibold">Dribbble</span>
+                  </button>
+
+                  <button
+                    onClick={shareToInstagram}
+                    className="flex items-center gap-2 bg-slate-900/50 hover:bg-blue-700 text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-blue-500/20 hover:border-blue-700/50"
+                  >
+                    <Instagram className="w-4 h-4" />
+                    <span className="text-sm font-semibold">instagram</span>
                   </button>
 
                   <button
