@@ -11,7 +11,7 @@ import FAQPage from './pages/FAQPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import SearchResultsPage from './pages/SearchResultsPage';
-import NotFoundPage from './pages/NotFoundPage';
+import NotFoundPage from './pages/NotFoundPage'; // Import the new page
 
 function App() {
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-900 dark:text-white">
+    <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300">
       <TechGridBackground />
       <Navigation currentPage={getCurrentPage()} onNavigate={handleNavigate} />
       <main className="relative z-10">
@@ -64,6 +64,8 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/terms" element={<TermsPage onNavigate={handleNavigate} />} />
           <Route path="/privacy" element={<PrivacyPage onNavigate={handleNavigate} />} />
+          {/* Catch-all route for 404 */}
+          <Route path="*" element={<NotFoundPage onNavigate={handleNavigate} />} />
         </Routes>
       </main>
       <footer className="relative z-10 border-t border-slate-200 dark:border-blue-500/20 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md">
