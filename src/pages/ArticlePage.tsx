@@ -393,9 +393,9 @@ export default function ArticlePage({ onNavigate }: ArticlePageProps) {
 
                   <button
                     onClick={copyToClipboard}
-                    className="flex items-center gap-2 bg-slate-900/50 hover:bg-cyan-600 text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-blue-500/20 hover:border-cyan-500/50 flex-1 sm:flex-none"
+                    className="flex items-center gap-2 bg-slate-900/50 hover:bg-cyan-600 text-gray-300 hover:text-white px-2 py-2 rounded-lg transition-all border border-blue-500/20 hover:border-cyan-500/50 flex-1 sm:flex-none"
                   >
-                    {copied ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
+                    {copied ? <Check className="w-4 h-4" /> : <Link2 className="w-2 h-2" />}
                     <span className="text-sm font-semibold">{copied ? 'Copied!' : 'Copy Link'}</span>
                   </button>
 
