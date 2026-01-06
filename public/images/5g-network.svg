@@ -1,0 +1,15 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#grad5)"/>
+  <circle cx="600" cy="400" r="80" fill="rgba(255,255,255,0.3)"/>
+  <circle cx="600" cy="400" r="140" fill="none" stroke="white" stroke-width="3" opacity="0.6"/>
+  <circle cx="600" cy="400" r="200" fill="none" stroke="white" stroke-width="3" opacity="0.4"/>
+  <circle cx="600" cy="400" r="260" fill="none" stroke="white" stroke-width="3" opacity="0.2"/>
+  <text x="600" y="420" font-family="Arial, sans-serif" font-size="80" fill="white" text-anchor="middle" font-weight="bold">5G</text>
+  <text x="600" y="680" font-family="Arial, sans-serif" font-size="32" fill="white" text-anchor="middle">Next-Gen Networks</text>
+</svg>

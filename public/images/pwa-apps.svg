@@ -1,0 +1,16 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#grad4)"/>
+  <rect x="350" y="150" width="500" height="500" rx="30" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="4"/>
+  <rect x="380" y="200" width="440" height="60" rx="10" fill="white"/>
+  <circle cx="430" cy="320" r="30" fill="rgba(255,255,255,0.8)"/>
+  <circle cx="600" cy="320" r="30" fill="rgba(255,255,255,0.8)"/>
+  <circle cx="770" cy="320" r="30" fill="rgba(255,255,255,0.8)"/>
+  <text x="600" y="480" font-family="Arial, sans-serif" font-size="56" fill="white" text-anchor="middle" font-weight="bold">PWA</text>
+  <text x="600" y="730" font-family="Arial, sans-serif" font-size="32" fill="white" text-anchor="middle">Progressive Web Apps</text>
+</svg>

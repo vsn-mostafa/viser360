@@ -1,0 +1,14 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0284c7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#grad6)"/>
+  <ellipse cx="480" cy="350" rx="120" ry="80" fill="rgba(255,255,255,0.3)"/>
+  <ellipse cx="650" cy="320" rx="140" ry="90" fill="rgba(255,255,255,0.4)"/>
+  <ellipse cx="580" cy="380" rx="160" ry="90" fill="rgba(255,255,255,0.35)"/>
+  <text x="600" y="580" font-family="Arial, sans-serif" font-size="64" fill="white" text-anchor="middle" font-weight="bold">Cloud Computing</text>
+  <text x="600" y="640" font-family="Arial, sans-serif" font-size="32" fill="rgba(255,255,255,0.9)" text-anchor="middle">Serverless & Beyond</text>
+</svg>
