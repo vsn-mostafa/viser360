@@ -108,7 +108,7 @@ class UserController {
 ## 4. Rich Media & Assets
 You can include images from the web or your local project folder effortlessly.
 
-![Our Office Setup](/public/images/cybersecurity.svg)
+![Our Office Setup](/images/cybersecurity.svg)
 
 :::warning
 **Note:** Make sure your local images are placed inside the \`public\` folder of your project to load correctly.
