@@ -42,4 +42,22 @@ export const categories: Category[] = [
     slug: 'blockchain',
     description: 'Cryptocurrency, NFTs, and blockchain technology',
   },
+  {
+    id: '7',
+    name: 'Visernic',
+    slug: 'visernic',
+    description: 'Software, and development updates from Visernic',
+  },
+  {
+    id: '8',
+    name: 'Press Releases',
+    slug: 'press-releases',
+    description: 'Company announcements and press releases',
+  },
+  {
+    id: '9',
+    name: 'Reviews',
+    slug: 'reviews',
+    description: 'Product reviews and user feedback',
+  },
 ];
