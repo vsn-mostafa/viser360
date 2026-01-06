@@ -4,21 +4,31 @@ export type Theme = 'light' | 'dark';
 
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(() => {
+    // 1. Check localStorage first
     const savedTheme = localStorage.getItem('theme');
-    return (savedTheme as Theme) || 'dark';
+    if (savedTheme) {
+      return savedTheme as Theme;
+    }
+    
+    // 2. Check system preference (Auto-detect)
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    
+    // 3. Default fallback
+    return 'dark';
   });
 
   useEffect(() => {
     const root = document.documentElement;
 
-    if (theme === 'dark') {
-      root.classList.add('dark');
-      root.classList.remove('light');
-    } else {
-      root.classList.remove('dark');
-      root.classList.add('light');
-    }
+    // Remove any existing classes to prevent conflicts
+    root.classList.remove('light', 'dark');
+    
+    // Add the current theme class
+    root.classList.add(theme);
 
+    // Save to localStorage
     localStorage.setItem('theme', theme);
   }, [theme]);
 
