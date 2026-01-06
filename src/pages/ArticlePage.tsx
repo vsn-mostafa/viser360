@@ -363,7 +363,7 @@ export default function ArticlePage({ onNavigate }: ArticlePageProps) {
                     onClick={shareToTwitter}
                     className="flex items-center gap-2 bg-slate-900/50 hover:bg-sky-500 text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-blue-500/20 hover:border-sky-500/50"
                   >
-                    <Twitter className="w-4 h-4" />
+                    <Twitter className="w-3 h-3" />
                     <span className="text-sm font-semibold">X</span>
                   </button>
 
@@ -371,24 +371,24 @@ export default function ArticlePage({ onNavigate }: ArticlePageProps) {
                     onClick={shareToLinkedIn}
                     className="flex items-center gap-2 bg-slate-900/50 hover:bg-blue-700 text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-blue-500/20 hover:border-blue-700/50"
                   >
-                    <Linkedin className="w-4 h-4" />
+                    <Linkedin className="w-3 h-3" />
                     <span className="text-sm font-semibold">LinkedIn</span>
                   </button>
 
                   <button
                     onClick={shareToDribbble}
-                    className="flex items-center gap-2 bg-slate-900/50 hover:bg-blue-700 text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-blue-500/20 hover:border-blue-700/50"
+                    className="flex items-center gap-2 bg-slate-900/50 hover:bg-blue-700 text-gray-300 hover:text-white px-2 py-2 rounded-lg transition-all border border-blue-500/20 hover:border-blue-700/50"
                   >
-                    <Dribbble className="w-4 h-4" />
-                    <span className="text-sm font-semibold">Dribbble</span>
+                    <Dribbble className="w-2 h-2" />
+                    <span className="text-sm font-semibold">Drib</span>
                   </button>
 
                   <button
                     onClick={shareToInstagram}
                     className="flex items-center gap-2 bg-slate-900/50 hover:bg-blue-700 text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-blue-500/20 hover:border-blue-700/50"
                   >
-                    <Instagram className="w-4 h-4" />
-                    <span className="text-sm font-semibold">instagram</span>
+                    <Instagram className="w-3 h-3" />
+                    <span className="text-sm font-semibold">Insta</span>
                   </button>
 
                   <button
