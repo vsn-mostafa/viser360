@@ -17,10 +17,10 @@ export default function FollowUs() {
   ];
 
   return (
-    <div className="bg-white dark:bg-slate-900/50 rounded-xl p-6 shadow-md">
+    <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 shadow-md">
       <div className="mb-6">
-        <h3 className="text-xl font-bold text-slate-900 dark:text-white">Follow Us</h3>
-        <div className="h-1 w-16 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full mt-2"></div>
+        <h3 className="text-xl font-bold text-white">Follow Us</h3>
+        <div className="h-1 w-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mt-2"></div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         {socialLinks.map((social) => {
@@ -31,7 +31,7 @@ export default function FollowUs() {
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`${social.color} text-white px-4 py-3 rounded-lg font-medium text-sm flex items-center gap-2 transition-all duration-200 transform hover:scale-105 shadow-sm`}
+              className={`${social.color} text-slate-50 px-4 py-3 rounded-lg font-medium text-sm flex items-center gap-2 transition-all duration-200 transform hover:scale-105 shadow-sm`}
             >
               <Icon className="w-4 h-4" />
               <span>{social.name}</span>
