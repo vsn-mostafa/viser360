@@ -3,113 +3,69 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    scroll-behavior: smooth;
+  :root {
+    --bg-primary: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --border-color: #e2e8f0;
+  }
+
+  .dark {
+    --bg-primary: #020617;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-color: #1e293b;
   }
 
   body {
-    @apply antialiased;
+    @apply antialiased transition-colors duration-300;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
   }
 
-  /* DARK MODE (Default) */
-  .dark {
-    background: #020617;
-    color-scheme: dark;
-  }
-
-  .dark body {
-    background: #020617;
-    color: #f8fafc;
-  }
-
-  /* LIGHT MODE (Improved High Contrast) */
-  .light {
-    background: #ffffff;
-    color-scheme: light;
-  }
-
+  /* Force Light Mode Styles */
   .light body {
-    background: #f8fafc;
-    color: #0f172a;
-  }
-
-  /* Override Background Colors in Light Mode */
-  .light .bg-slate-950,
-  .light .bg-slate-900,
-  .light .bg-gray-900 {
     background-color: #ffffff !important;
-    border: 1px solid #e2e8f0 !important;
     color: #0f172a !important;
   }
 
-  /* Override Text Colors in Light Mode to ensure visibility */
+  /* Force Dark Mode Styles */
+  .dark body {
+    background-color: #020617 !important;
+    color: #f8fafc !important;
+  }
+}
+
+@layer components {
+  /* Common Card Styles */
+  .card-base {
+    @apply bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl transition-all duration-300;
+  }
+  
+  /* Text Visibility Fixes */
   .light .text-white {
+    color: #0f172a !important; /* Forces white text to be dark in light mode */
+  }
+  
+  .light .bg-slate-950,
+  .light .bg-slate-900 {
+    background-color: #ffffff !important;
     color: #0f172a !important;
-  }
-
-  .light .text-slate-300,
-  .light .text-slate-400,
-  .light .text-gray-300,
-  .light .text-gray-400,
-  .light .text-gray-500 {
-    color: #475569 !important;
-  }
-
-  .light .text-slate-200,
-  .light .text-gray-200 {
-    color: #334155 !important;
-  }
-
-  /* Fix Card Shadows in Light Mode */
-  .light .shadow-lg,
-  .light .shadow-xl {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-  }
-
-  /* Fix Borders */
-  .light .border-slate-800,
-  .light .border-slate-700 {
     border-color: #e2e8f0 !important;
   }
-  
-  /* Fix Breaking News / Special Components in Light Mode */
+
+  /* Breaking News Fix */
   .light .bg-red-600 {
     background-color: #dc2626 !important;
-    color: white !important;
+    color: #ffffff !important;
   }
-  
   .light .bg-red-600 .text-white {
-    color: white !important; /* Keep text white on red background */
+    color: #ffffff !important; /* Keep text white on red background */
   }
 }
 
 @layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 0.8s ease-in-out;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradient 3s ease infinite;
-  }
-
-  @keyframes gradient {
-    0%, 100% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
+  .text-glow {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
   }
 }
