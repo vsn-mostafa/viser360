@@ -11,7 +11,7 @@ import FAQPage from './pages/FAQPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import SearchResultsPage from './pages/SearchResultsPage';
-import NotFoundPage from './pages/NotFoundPage'; // Import the new page
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   const navigate = useNavigate();
@@ -50,10 +50,11 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300">
+    // Added transition-colors for smooth theme switching
+    <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300">
       <TechGridBackground />
       <Navigation currentPage={getCurrentPage()} onNavigate={handleNavigate} />
-      <main className="relative z-10">
+      <main className="relative z-10 pt-16">
         <Routes>
           <Route path="/" element={<HomePage onNavigate={handleNavigate} onSearch={handleSearch} />} />
           <Route path="/article/:slug" element={<ArticlePage onNavigate={handleNavigate} />} />
@@ -64,11 +65,12 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/terms" element={<TermsPage onNavigate={handleNavigate} />} />
           <Route path="/privacy" element={<PrivacyPage onNavigate={handleNavigate} />} />
-          {/* Catch-all route for 404 */}
           <Route path="*" element={<NotFoundPage onNavigate={handleNavigate} />} />
         </Routes>
       </main>
-      <footer className="relative z-10 border-t border-slate-200 dark:border-blue-500/20 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md">
+      
+      {/* Footer with Theme Support */}
+      <footer className="relative z-10 border-t border-slate-200 dark:border-blue-500/20 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <p className="text-slate-600 dark:text-gray-400 mb-2">
