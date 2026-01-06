@@ -388,7 +388,7 @@ export default function ArticlePage({ onNavigate }: ArticlePageProps) {
                     className="flex items-center gap-2 bg-slate-900/50 hover:bg-blue-700 text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-blue-500/20 hover:border-blue-700/50"
                   >
                     <Instagram className="w-3 h-3" />
-                    <span className="text-sm font-semibold">Insta</span>
+                    <span className="text-sm font-semibold">Instagram>Ispan>
                   </button>
 
                   <button
