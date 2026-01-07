@@ -10,8 +10,17 @@ export default function TechGridBackground() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // Reduce load on high DPI screens
+    const dpr = window.devicePixelRatio || 1;
+    // Cap pixel ratio to 2 to prevent massive load on 4K screens
+    const effectiveDpr = Math.min(dpr, 2); 
+
+    const resize = () => {
+      canvas.width = window.innerWidth * effectiveDpr;
+      canvas.height = window.innerHeight * effectiveDpr;
+      ctx.scale(effectiveDpr, effectiveDpr);
+    };
+    resize();
 
     const particles: Array<{
       x: number;
@@ -21,82 +30,61 @@ export default function TechGridBackground() {
       size: number;
     }> = [];
 
-    const particleCount = 50;
-    const gridSize = 50;
+    // REDUCED Particle Count for Laptop Performance
+    // Old value: 50. New: Based on screen width but capped.
+    const particleCount = Math.min(30, Math.floor(window.innerWidth / 30)); 
+    const gridSize = 60; // Slightly larger grid = fewer lines to draw
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1,
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        vx: (Math.random() - 0.5) * 0.3, // Slower movement = smoother look
+        vy: (Math.random() - 0.5) * 0.3,
+        size: Math.random() * 2 + 0.5,
       });
     }
 
     function drawGrid() {
       if (!ctx || !canvas) return;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
 
-      ctx.strokeStyle = 'rgba(59, 130, 246, 0.6)';
-      ctx.lineWidth = 1;
-      ctx.shadowBlur = 3;
-      ctx.shadowColor = 'rgba(59, 130, 246, 0.5)';
+      ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)'; // Lower opacity
+      ctx.lineWidth = 0.5; // Thinner lines
+      // Removed excessive shadows for performance
 
-      for (let x = 0; x < canvas.width; x += gridSize) {
+      for (let x = 0; x < width; x += gridSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
+        ctx.lineTo(x, height);
         ctx.stroke();
       }
 
-      for (let y = 0; y < canvas.height; y += gridSize) {
+      for (let y = 0; y < height; y += gridSize) {
         ctx.beginPath();
         ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
+        ctx.lineTo(width, y);
         ctx.stroke();
       }
-
-      ctx.strokeStyle = 'rgba(34, 211, 238, 0.7)';
-      ctx.lineWidth = 2;
-      ctx.shadowBlur = 5;
-      ctx.shadowColor = 'rgba(34, 211, 238, 0.6)';
-
-      for (let x = 0; x < canvas.width; x += gridSize * 4) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-      }
-
-      for (let y = 0; y < canvas.height; y += gridSize * 4) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-      }
-
-      ctx.shadowBlur = 0;
     }
 
     function drawParticles() {
       if (!ctx) return;
-
+      
       particles.forEach((particle) => {
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(59, 130, 246, 0.8)';
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = 'rgba(59, 130, 246, 0.8)';
+        ctx.fillStyle = 'rgba(59, 130, 246, 0.6)';
         ctx.fill();
 
         particle.x += particle.vx;
         particle.y += particle.vy;
 
-        if (particle.x < 0 || particle.x > canvas!.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas!.height) particle.vy *= -1;
+        // Bounce
+        if (particle.x < 0 || particle.x > window.innerWidth) particle.vx *= -1;
+        if (particle.y < 0 || particle.y > window.innerHeight) particle.vy *= -1;
       });
-
-      ctx.shadowBlur = 0;
     }
 
     function connectParticles() {
@@ -108,44 +96,46 @@ export default function TechGridBackground() {
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 150) {
+          // Reduced connection distance to reduce draw calls
+          if (distance < 120) {
             ctx.beginPath();
-            const opacity = 0.4 - distance / 750;
+            const opacity = 0.3 - distance / 400;
             ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;
-            ctx.lineWidth = 1;
-            ctx.shadowBlur = 2;
-            ctx.shadowColor = `rgba(34, 211, 238, ${opacity})`;
+            ctx.lineWidth = 0.5;
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             ctx.stroke();
           }
-          ctx.shadowBlur = 0;
         }
       }
     }
 
+    let animationFrameId: number;
+    
     function animate() {
       if (!ctx || !canvas) return;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Use window dimensions instead of canvas props for clearing
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      
       drawGrid();
       drawParticles();
       connectParticles();
-      requestAnimationFrame(animate);
+      
+      animationFrameId = requestAnimationFrame(animate);
     }
 
     animate();
 
     const handleResize = () => {
-      if (!canvas) return;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+        resize();
     };
 
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
