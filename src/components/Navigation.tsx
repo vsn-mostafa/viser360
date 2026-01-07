@@ -19,40 +19,29 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
     { id: 'contact', label: 'Contact', icon: Mail },
   ];
 
-  const handleNavClick = (e: React.MouseEvent, page: string) => {
-    e.preventDefault(); // Prevents full page reload for SPA feel
-    onNavigate(page);
-    setMobileMenuOpen(false);
-  };
-
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-blue-500/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo updated to use <a> tag and <h1> for SEO */}
-          <a
-            href="/"
-            className="flex items-center space-x-2 group"
-            onClick={(e) => handleNavClick(e, 'home')}
-            aria-label="Viser360 Home"
+          <div
+            className="flex items-center space-x-2 cursor-pointer group"
+            onClick={() => onNavigate('home')}
           >
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center transform group-hover:scale-110 transition-transform">
               <BookOpen className="w-6 h-6 text-white" />
             </div>
-            {/* H1 tag added for SEO, styled to match previous span */}
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent margin-0">
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
               Viser360
-            </h1>
-          </a>
+            </span>
+          </div>
 
           <div className="hidden md:flex items-center space-x-4">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
-                <a
+                <button
                   key={item.id}
-                  href={`/${item.id === 'home' ? '' : item.id}`}
-                  onClick={(e) => handleNavClick(e, item.id)}
+                  onClick={() => onNavigate(item.id)}
                   className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${
                     currentPage === item.id
                       ? 'bg-blue-500/20 text-blue-400'
@@ -61,7 +50,7 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
                 >
                   <Icon className="w-4 h-4" />
                   <span>{item.label}</span>
-                </a>
+                </button>
               );
             })}
             <button
@@ -74,9 +63,7 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
           </div>
 
           <div className="md:hidden flex items-center space-x-2">
-             {/* Mobile menu code remains same but use handleNavClick if needed inside */}
-             {/* ... (Existing mobile buttons) */}
-             <button
+            <button
               onClick={toggleTheme}
               className="p-2 text-gray-300 hover:text-blue-400"
               aria-label="Toggle theme"
@@ -99,10 +86,12 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
-                <a
+                <button
                   key={item.id}
-                  href={`/${item.id === 'home' ? '' : item.id}`}
-                  onClick={(e) => handleNavClick(e, item.id)}
+                  onClick={() => {
+                    onNavigate(item.id);
+                    setMobileMenuOpen(false);
+                  }}
                   className={`flex items-center space-x-3 w-full px-4 py-3 rounded-lg transition-all ${
                     currentPage === item.id
                       ? 'bg-blue-500/20 text-blue-400'
@@ -111,7 +100,7 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
                 >
                   <Icon className="w-5 h-5" />
                   <span>{item.label}</span>
-                </a>
+                </button>
               );
             })}
           </div>
