@@ -71,7 +71,7 @@ The BCI revolution is just beginning, promising to fundamentally transform how w
 
 Explore BCI research at [visernic.com/neuraltech](https://visernic.com/neuraltech).`,
   excerpt: 'Brain-computer interfaces enable mind-controlled devices as non-invasive neural technology allows paralyzed patients to control prosthetics and restores communication abilities.',
-  cover_image: '/images/ai-future.svg',
+  cover_image: '/images/pwa-apps.svg',
   author_id: '1',
   category_id: '1',
   published: true,
