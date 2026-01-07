@@ -1,10 +1,9 @@
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState, lazy, Suspense } from 'react';
-import { Loader2 } from 'lucide-react';
 import TechGridBackground from './components/TechGridBackground';
 import Navigation from './components/Navigation';
 
-// --- Lazy Load Pages (Code Splitting for High Performance) ---
+// --- Lazy Load Pages for Faster Initial Speed ---
 const HomePage = lazy(() => import('./pages/HomePage'));
 const ArticlePage = lazy(() => import('./pages/ArticlePage'));
 const CategoriesPage = lazy(() => import('./pages/CategoriesPage'));
@@ -16,69 +15,53 @@ const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 const SearchResultsPage = lazy(() => import('./pages/SearchResultsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
-// --- Components ---
-
-// 1. Global Suspense Loader (Small spinner for page transitions)
-const PageLoader = () => (
-  <div className="min-h-[50vh] flex items-center justify-center">
-    <div className="flex flex-col items-center gap-3">
-      <Loader2 className="w-10 h-10 text-blue-500 animate-spin" />
+// --- Custom Preloader Component ---
+const Preloader = () => (
+  <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950">
+    <div className="relative flex items-center justify-center">
+      {/* Outer Glowing Ring */}
+      <div className="absolute w-40 h-40 rounded-full border-2 border-blue-500/20 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
+      
+      {/* Spinning Loading Border */}
+      <div className="absolute w-36 h-36 rounded-full border-2 border-slate-800 border-t-blue-500 border-r-cyan-500 animate-spin"></div>
+      
+      {/* Logo Container Circle */}
+      <div className="relative z-10 w-28 h-28 bg-slate-900/50 backdrop-blur-xl rounded-full flex items-center justify-center border border-slate-700/50 shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)]">
+        <img 
+          src="/images/logo.svg" 
+          alt="Loading..." 
+          className="w-16 h-16 object-contain animate-pulse" 
+        />
+      </div>
     </div>
   </div>
 );
 
-// 2. Homepage Exclusive Splash Screen (Futuristic & Realistic)
-const HomePreloader = () => (
-  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 backdrop-blur-xl transition-all duration-500">
-    <div className="relative">
-      {/* Outer Glow */}
-      <div className="absolute inset-0 bg-blue-500/30 blur-3xl rounded-full animate-pulse"></div>
-      
-      {/* Spinner Container */}
-      <div className="relative flex flex-col items-center justify-center gap-6 p-8">
-        <div className="relative w-24 h-24">
-          <div className="absolute inset-0 border-4 border-slate-800 rounded-full"></div>
-          <div className="absolute inset-0 border-4 border-t-blue-500 border-r-cyan-500 border-b-transparent border-l-transparent rounded-full animate-spin"></div>
-          <div className="absolute inset-4 border-4 border-t-purple-500 border-l-transparent border-b-transparent border-r-transparent rounded-full animate-spin reverse"></div>
-          <div className="absolute inset-0 flex items-center justify-center">
-             <span className="text-2xl font-bold text-white tracking-tighter">V<span className="text-blue-500">360</span></span>
-          </div>
-        </div>
-        
-        {/* Loading Text */}
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-blue-400 font-medium tracking-[0.2em] text-sm animate-pulse">INITIALIZING</span>
-          <div className="h-1 w-32 bg-slate-800 rounded-full overflow-hidden">
-             <div className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 w-full animate-progress origin-left"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+// --- Route Transition Loader ---
+const PageLoader = () => (
+  <div className="min-h-[60vh] flex items-center justify-center">
+    <div className="w-10 h-10 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin"></div>
   </div>
 );
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isHomeLoading, setIsHomeLoading] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-  // --- Logic: Scroll to Top & Homepage Preloader ---
+  // --- Initial 2-Second Preloader Logic ---
   useEffect(() => {
-    // 1. Smooth Scroll
-    window.requestAnimationFrame(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    // Only show preloader if on homepage or root
+    const timer = setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 2000);
 
-    // 2. Handle Homepage Preloader (2 Seconds)
-    if (location.pathname === '/') {
-      setIsHomeLoading(true);
-      const timer = setTimeout(() => {
-        setIsHomeLoading(false);
-      }, 2000);
-      return () => clearTimeout(timer);
-    } else {
-      setIsHomeLoading(false);
-    }
+    return () => clearTimeout(timer);
+  }, []);
+
+  // --- Optimized Smooth Scroll ---
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location.pathname]);
 
   const handleNavigate = (page: string, articleSlug?: string) => {
@@ -109,21 +92,18 @@ function App() {
     return 'home';
   };
 
+  // Show Preloader on Initial Load
+  if (isInitialLoad) {
+    return <Preloader />;
+  }
+
   return (
-    // "flex flex-col" ensures the footer sits at the bottom properly without huge gaps
-    <div className="flex flex-col min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300 font-sans">
-      
-      {/* Background stays persistent */}
+    <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300 flex flex-col">
       <TechGridBackground />
-
-      {/* Show Homepage Preloader Overlay if on Home and Loading */}
-      {isHomeLoading && <HomePreloader />}
-
-      {/* Navigation */}
       <Navigation currentPage={getCurrentPage()} onNavigate={handleNavigate} />
-
-      {/* Main Content Area: Flex-grow pushes footer down, minimal spacing issues */}
-      <main className="flex-grow relative z-10 w-full">
+      
+      <main className="relative z-10 flex-grow">
+        {/* Suspense handles the loading state for code-split pages */}
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<HomePage onNavigate={handleNavigate} onSearch={handleSearch} />} />
@@ -140,14 +120,13 @@ function App() {
         </Suspense>
       </main>
 
-      {/* Footer: Optimized padding for mobile/desktop */}
       <footer className="relative z-10 border-t border-slate-200 dark:border-blue-500/20 bg-white/90 dark:bg-slate-900/80 backdrop-blur-md mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <p className="text-slate-600 dark:text-gray-400 mb-2 font-medium">
+            <p className="text-slate-600 dark:text-gray-400 mb-2">
               &copy; {new Date().getFullYear()} Viser360. All rights reserved.
             </p>
-            <p className="text-slate-500 dark:text-gray-500 text-xs sm:text-sm">
+            <p className="text-slate-500 dark:text-gray-500 text-sm">
               Built by Mostafa Niloy | Tech News Platform
             </p>
           </div>
