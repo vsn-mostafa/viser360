@@ -57,7 +57,7 @@ The digital twin market is projected to grow from $6 billion to ==$73 billion by
 
 Explore digital twin solutions at [visernic.com/digital-twins](https://visernic.com/digital-twins).`,
   excerpt: '75% of manufacturers adopting digital twins achieve 30-50% reduced downtime and $1.5 billion savings through AI-powered virtual replicas and predictive maintenance.',
-  cover_image: '/images/ai-future.svg',
+  cover_image: '/images/pwa-apps.svg',
   author_id: '1',
   category_id: '3',
   published: true,
