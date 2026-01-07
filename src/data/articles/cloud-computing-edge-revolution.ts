@@ -54,7 +54,7 @@ Organizations implementing edge computing should consider:
 
 For enterprise edge computing solutions, explore [visernic.com/cloud](https://visernic.com/cloud).`,
   excerpt: 'Edge computing brings processing power closer to users, enabling real-time applications with 1-10ms latency for autonomous vehicles, smart manufacturing, and IoT devices.',
-  cover_image: '/images/cloud-computing.svg',
+  cover_image: '/images/pwa-apps.svg',
   author_id: '1',
   category_id: '2',
   published: true,
