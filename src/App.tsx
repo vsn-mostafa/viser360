@@ -3,7 +3,7 @@ import { useEffect, useState, lazy, Suspense } from 'react';
 import TechGridBackground from './components/TechGridBackground';
 import Navigation from './components/Navigation';
 
-// --- Lazy Load Pages for Faster Initial Speed ---
+// --- Lazy Load Pages (Optimized for Speed) ---
 const HomePage = lazy(() => import('./pages/HomePage'));
 const ArticlePage = lazy(() => import('./pages/ArticlePage'));
 const CategoriesPage = lazy(() => import('./pages/CategoriesPage'));
@@ -15,53 +15,63 @@ const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 const SearchResultsPage = lazy(() => import('./pages/SearchResultsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
-// --- Custom Preloader Component ---
+// --- Preloader Component (Splash Screen) ---
 const Preloader = () => (
-  <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950">
+  <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950 text-white">
     <div className="relative flex items-center justify-center">
-      {/* Outer Glowing Ring */}
-      <div className="absolute w-40 h-40 rounded-full border-2 border-blue-500/20 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
+      {/* Animated Rings */}
+      <div className="absolute w-32 h-32 border-4 border-blue-500/20 rounded-full animate-[spin_3s_linear_infinite]"></div>
+      <div className="absolute w-32 h-32 border-t-4 border-blue-500 rounded-full animate-[spin_1.5s_linear_infinite]"></div>
       
-      {/* Spinning Loading Border */}
-      <div className="absolute w-36 h-36 rounded-full border-2 border-slate-800 border-t-blue-500 border-r-cyan-500 animate-spin"></div>
-      
-      {/* Logo Container Circle */}
-      <div className="relative z-10 w-28 h-28 bg-slate-900/50 backdrop-blur-xl rounded-full flex items-center justify-center border border-slate-700/50 shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)]">
+      {/* Logo Container */}
+      <div className="relative w-24 h-24 bg-slate-900 rounded-full flex items-center justify-center shadow-lg border border-slate-800 z-10">
         <img 
           src="/images/logo.svg" 
-          alt="Loading..." 
-          className="w-16 h-16 object-contain animate-pulse" 
+          alt="Viser360 Logo" 
+          className="w-14 h-14 animate-pulse" 
         />
       </div>
     </div>
+    <div className="mt-8 flex flex-col items-center gap-2">
+      <div className="h-1 w-24 bg-slate-800 rounded-full overflow-hidden">
+        <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 animate-[loading_2s_ease-in-out]"></div>
+      </div>
+    </div>
+    <style>{`
+      @keyframes loading {
+        0% { width: 0% }
+        100% { width: 100% }
+      }
+    `}</style>
   </div>
 );
 
-// --- Route Transition Loader ---
+// --- Route Transition Loader (Minimal) ---
 const PageLoader = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
-    <div className="w-10 h-10 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin"></div>
+    <div className="w-10 h-10 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
   </div>
 );
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
 
-  // --- Initial 2-Second Preloader Logic ---
+  // Handle Splash Screen (2 Seconds)
   useEffect(() => {
-    // Only show preloader if on homepage or root
     const timer = setTimeout(() => {
-      setIsInitialLoad(false);
+      setShowSplash(false);
     }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
-  // --- Optimized Smooth Scroll ---
+  // Optimized Smooth Scroll
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }, [location.pathname]);
 
   const handleNavigate = (page: string, articleSlug?: string) => {
@@ -92,8 +102,8 @@ function App() {
     return 'home';
   };
 
-  // Show Preloader on Initial Load
-  if (isInitialLoad) {
+  // Show Preloader strictly for the first 2 seconds
+  if (showSplash) {
     return <Preloader />;
   }
 
@@ -103,7 +113,6 @@ function App() {
       <Navigation currentPage={getCurrentPage()} onNavigate={handleNavigate} />
       
       <main className="relative z-10 flex-grow">
-        {/* Suspense handles the loading state for code-split pages */}
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<HomePage onNavigate={handleNavigate} onSearch={handleSearch} />} />
