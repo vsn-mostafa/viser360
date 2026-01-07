@@ -40,7 +40,7 @@ The new **Matter protocol** enables seamless device interoperability across bran
 
 For smart home solutions, visit [visernic.com/iot](https://visernic.com/iot).`,
   excerpt: '2 billion IoT smart home devices now connected globally, enabling energy savings of 15-25% and revolutionizing home security with AI-powered systems.',
-  cover_image: '/images/cloud-computing.svg',
+  cover_image: '/images/pwa-apps.svg',
   author_id: '1',
   category_id: '1',
   published: true,
