@@ -34,14 +34,11 @@ export default function ArticlePage({ onNavigate }: ArticlePageProps) {
 
   // Smooth Scroll to Top & Data Fetching
   useEffect(() => {
-    // Immediate scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setLoading(true);
 
     if (slug) {
       const foundArticle = getArticleBySlug(slug);
-      
-      // Artificial delay removed for "Rocket Loading"
       setArticle(foundArticle);
       
       if (foundArticle) {
@@ -157,20 +154,20 @@ export default function ArticlePage({ onNavigate }: ArticlePageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-16 flex items-center justify-center bg-slate-50 dark:bg-[#020617]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen pt-16 flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 dark:border-blue-500"></div>
       </div>
     );
   }
 
   if (!article) {
     return (
-      <div className="min-h-screen pt-16 flex items-center justify-center bg-slate-50 dark:bg-[#020617]">
+      <div className="min-h-screen pt-16 flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Article not found</h2>
           <button
             onClick={() => onNavigate('home')}
-            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center space-x-2 mx-auto"
+            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center space-x-2 mx-auto font-medium transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Home</span>
@@ -188,153 +185,179 @@ export default function ArticlePage({ onNavigate }: ArticlePageProps) {
   const nextArticle = currentIndex < articles.length - 1 ? articles[currentIndex + 1] : null;
 
   return (
-    <div className="min-h-screen pt-16 bg-slate-50 dark:bg-[#020617] transition-colors duration-300">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
+    <div className="min-h-screen pt-16 bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Back Button */}
         <button
           onClick={() => onNavigate('home')}
-          className="flex items-center space-x-2 text-slate-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 mb-8 transition-colors group"
+          className="flex items-center space-x-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 mb-8 transition-colors group font-medium"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>Back to Articles</span>
         </button>
 
-        <article className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-sm rounded-xl sm:rounded-2xl overflow-hidden border border-slate-200 dark:border-blue-500/20 shadow-sm dark:shadow-none transition-all">
-          <div className="relative h-56 sm:h-72 md:h-96 overflow-hidden group">
+        {/* Main Article Card */}
+        <article className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none transition-all duration-300">
+          
+          {/* Cover Image & Category */}
+          <div className="relative h-64 sm:h-80 md:h-[450px] overflow-hidden group">
             <img
               src={article.cover_image}
               alt={article.title}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               loading="eager"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent"></div>
             {category && (
-              <div className="absolute top-4 left-4 sm:top-6 sm:left-6">
-                <span className="bg-blue-600/90 dark:bg-blue-500 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-lg backdrop-blur-md">
+              <div className="absolute top-6 left-6 z-10">
+                <span className="bg-blue-600/90 dark:bg-blue-600 text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-lg backdrop-blur-md border border-white/10 uppercase tracking-wide">
                   {category.name}
                 </span>
               </div>
             )}
           </div>
 
-          <div className="p-4 sm:p-6 md:p-8 lg:p-12">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-4 sm:mb-6 leading-tight">
+          <div className="p-6 sm:p-10 md:p-12">
+            {/* Title */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-6 leading-tight tracking-tight">
               {article.title}
             </h1>
 
-            <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-6 mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-slate-200 dark:border-slate-700">
+            {/* Author & Meta Info */}
+            <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-4 sm:gap-8 mb-8 pb-8 border-b border-slate-100 dark:border-slate-800">
               {author && (
                 <div className="flex items-center space-x-3">
                   <img
                     src={getGravatarUrl(author.email)}
                     alt={author.name}
-                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full ring-2 ring-blue-500/50 object-cover"
+                    className="w-12 h-12 rounded-full ring-2 ring-slate-100 dark:ring-slate-700 object-cover"
                     loading="lazy"
                   />
                   <div>
-                    <p className="text-slate-900 dark:text-white font-semibold text-sm sm:text-base">{author.name}</p>
-                    <p className="text-slate-500 dark:text-gray-400 text-xs sm:text-sm">{author.email}</p>
+                    <p className="text-slate-900 dark:text-white font-bold text-base">{author.name}</p>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{author.email}</p>
                   </div>
                 </div>
               )}
-              <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs sm:text-sm text-slate-500 dark:text-gray-400 font-medium">
-                <div className="flex items-center space-x-1.5 sm:space-x-2">
-                  <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
+              
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-slate-500 dark:text-slate-400 font-medium">
+                <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-lg">
+                  <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   <span>{formatDate(article.created_at)}</span>
                 </div>
-                <div className="flex items-center space-x-1.5 sm:space-x-2">
-                  <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
-                  <span>{views} views</span>
+                <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-lg">
+                  <Eye className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <span>{views.toLocaleString()} views</span>
                 </div>
-                <div className="flex items-center space-x-1.5 sm:space-x-2">
-                  <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
+                <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-lg">
+                  <MessageCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   <span>{comments.length} comments</span>
                 </div>
               </div>
             </div>
 
-            <div className="mb-8 sm:mb-12">
+            {/* Article Content */}
+            <div className="mb-12">
               <ArticleContent content={article.content} />
             </div>
 
+            {/* About Author Box */}
             {author && author.bio && (
-              <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 sm:p-6 mb-8 sm:mb-12 border border-slate-200 dark:border-slate-800">
-                <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white mb-3">About the Author</h3>
-                <div className="flex items-start space-x-3 sm:space-x-4">
+              <div className="bg-slate-50 dark:bg-slate-800/40 rounded-2xl p-6 sm:p-8 mb-12 border border-slate-100 dark:border-slate-800">
+                <div className="flex items-start space-x-4">
                   <img
                     src={getGravatarUrl(author.email)}
                     alt={author.name}
-                    className="w-12 h-12 sm:w-16 sm:h-16 rounded-full ring-2 ring-blue-500/50 object-cover"
+                    className="w-16 h-16 rounded-full ring-4 ring-white dark:ring-slate-700 shadow-md object-cover"
                     loading="lazy"
                   />
                   <div>
-                    <p className="text-slate-900 dark:text-white font-semibold mb-1 text-sm sm:text-base">{author.name}</p>
-                    <p className="text-slate-600 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">{author.bio}</p>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">About the Author</h3>
+                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">{author.bio}</p>
                   </div>
                 </div>
               </div>
             )}
 
-            <div className="border-t border-slate-200 dark:border-slate-700 pt-8 sm:pt-12">
-              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-4 sm:mb-6 flex items-center space-x-2">
-                <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 dark:text-blue-400" />
+            {/* Comments Section */}
+            <div className="border-t border-slate-200 dark:border-slate-800 pt-10 sm:pt-12">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                  <MessageCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                </div>
                 <span>Comments ({comments.length})</span>
               </h3>
 
-              <form onSubmit={handleSubmitComment} className="mb-8 bg-slate-50 dark:bg-slate-900/50 rounded-xl p-6 border border-slate-200 dark:border-slate-800">
-                <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Leave a Comment</h4>
-                <div className="grid md:grid-cols-2 gap-4 mb-4">
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    value={commentForm.author_name}
-                    onChange={(e) => setCommentForm({ ...commentForm, author_name: e.target.value })}
+              <form onSubmit={handleSubmitComment} className="mb-10 bg-slate-50 dark:bg-slate-800/30 rounded-2xl p-6 sm:p-8 border border-slate-100 dark:border-slate-800">
+                <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Leave a Reply</h4>
+                <div className="grid md:grid-cols-2 gap-5 mb-5">
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Name</label>
+                    <input
+                      type="text"
+                      placeholder="John Doe"
+                      value={commentForm.author_name}
+                      onChange={(e) => setCommentForm({ ...commentForm, author_name: e.target.value })}
+                      required
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Email</label>
+                    <input
+                      type="email"
+                      placeholder="john@example.com"
+                      value={commentForm.author_email}
+                      onChange={(e) => setCommentForm({ ...commentForm, author_email: e.target.value })}
+                      required
+                      className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2 mb-6">
+                  <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Comment</label>
+                  <textarea
+                    placeholder="Share your thoughts..."
+                    value={commentForm.content}
+                    onChange={(e) => setCommentForm({ ...commentForm, content: e.target.value })}
                     required
-                    className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Your Email"
-                    value={commentForm.author_email}
-                    onChange={(e) => setCommentForm({ ...commentForm, author_email: e.target.value })}
-                    required
-                    className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    rows={4}
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm resize-y min-h-[120px]"
                   />
                 </div>
-                <textarea
-                  placeholder="Your comment..."
-                  value={commentForm.content}
-                  onChange={(e) => setCommentForm({ ...commentForm, content: e.target.value })}
-                  required
-                  rows={4}
-                  className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 transition-all"
-                />
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transition-all flex items-center space-x-2 disabled:opacity-50 shadow-lg shadow-blue-500/20"
+                  className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white px-8 py-3 rounded-xl font-bold transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transform active:scale-95"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>{submitting ? 'Posting...' : 'Post Comment'}</span>
+                  {submitting ? (
+                    <>Posting...</>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      Post Comment
+                    </>
+                  )}
                 </button>
               </form>
 
               <div className="space-y-6">
                 {comments.map((comment) => (
-                  <div key={comment.id} className="bg-white dark:bg-slate-900/50 rounded-xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+                  <div key={comment.id} className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm transition-hover hover:border-slate-300 dark:hover:border-slate-700">
                     <div className="flex items-start space-x-4">
                       <img
                         src={getGravatarUrl(comment.author_email)}
                         alt={comment.author_name}
-                        className="w-10 h-10 rounded-full ring-2 ring-slate-200 dark:ring-slate-700 object-cover"
+                        className="w-10 h-10 rounded-full ring-2 ring-slate-100 dark:ring-slate-800 object-cover flex-shrink-0"
                       />
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-2">
-                          <h5 className="text-slate-900 dark:text-white font-semibold">{comment.author_name}</h5>
-                          <span className="text-sm text-slate-500 dark:text-gray-500">
+                          <h5 className="text-slate-900 dark:text-white font-bold text-base truncate pr-2">{comment.author_name}</h5>
+                          <span className="text-xs text-slate-500 dark:text-slate-500 whitespace-nowrap bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
                             {formatDate(comment.created_at)}
                           </span>
                         </div>
-                        <p className="text-slate-700 dark:text-gray-300 leading-relaxed">{comment.content}</p>
+                        <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm sm:text-base">{comment.content}</p>
                       </div>
                     </div>
                   </div>
@@ -342,107 +365,75 @@ export default function ArticlePage({ onNavigate }: ArticlePageProps) {
               </div>
 
               {comments.length === 0 && (
-                <p className="text-center text-slate-500 dark:text-gray-400 py-8">
-                  No comments yet. Be the first to comment!
-                </p>
+                <div className="text-center py-12 bg-slate-50 dark:bg-slate-800/20 rounded-xl border border-dashed border-slate-200 dark:border-slate-800">
+                  <MessageCircle className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+                  <p className="text-slate-500 dark:text-slate-400 font-medium">No comments yet.</p>
+                  <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">Be the first to share your thoughts!</p>
+                </div>
               )}
             </div>
 
-            <div className="border-t border-slate-200 dark:border-slate-700 pt-8 mt-8">
-              <div className="mb-8">
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                  <Share2 className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+            {/* Share & Navigation Section */}
+            <div className="border-t border-slate-200 dark:border-slate-800 pt-10 mt-10">
+              <div className="mb-10">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                  <Share2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   Share This Article
                 </h3>
-                <div className="flex flex-wrap items-center gap-3">
-                  <button
-                    onClick={shareToFacebook}
-                    className="flex items-center gap-2 bg-slate-100 dark:bg-slate-900/50 hover:bg-blue-600 text-slate-600 dark:text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-slate-200 dark:border-blue-500/20 hover:border-blue-600 dark:hover:border-blue-500/50"
-                  >
-                    <Facebook className="w-4 h-4" />
-                    <span className="text-sm font-semibold">Facebook</span>
+                <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-3">
+                  <button onClick={shareToFacebook} className="flex items-center justify-center gap-2 bg-[#1877F2]/10 hover:bg-[#1877F2] text-[#1877F2] hover:text-white px-4 py-2.5 rounded-xl transition-all font-semibold text-sm">
+                    <Facebook className="w-4 h-4" /> Facebook
                   </button>
-
-                  <button
-                    onClick={shareToTwitter}
-                    className="flex items-center gap-2 bg-slate-100 dark:bg-slate-900/50 hover:bg-sky-500 text-slate-600 dark:text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-slate-200 dark:border-blue-500/20 hover:border-sky-500 dark:hover:border-sky-500/50"
-                  >
-                    <Twitter className="w-3 h-3" />
-                    <span className="text-sm font-semibold">X</span>
+                  <button onClick={shareToTwitter} className="flex items-center justify-center gap-2 bg-black/5 dark:bg-white/10 hover:bg-black dark:hover:bg-white text-slate-700 dark:text-white hover:text-white dark:hover:text-black px-4 py-2.5 rounded-xl transition-all font-semibold text-sm">
+                    <Twitter className="w-4 h-4" /> X / Twitter
                   </button>
-
-                  <button
-                    onClick={shareToLinkedIn}
-                    className="flex items-center gap-2 bg-slate-100 dark:bg-slate-900/50 hover:bg-blue-700 text-slate-600 dark:text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-slate-200 dark:border-blue-500/20 hover:border-blue-700 dark:hover:border-blue-700/50"
-                  >
-                    <Linkedin className="w-3 h-3" />
-                    <span className="text-sm font-semibold">LinkedIn</span>
+                  <button onClick={shareToLinkedIn} className="flex items-center justify-center gap-2 bg-[#0A66C2]/10 hover:bg-[#0A66C2] text-[#0A66C2] hover:text-white px-4 py-2.5 rounded-xl transition-all font-semibold text-sm">
+                    <Linkedin className="w-4 h-4" /> LinkedIn
                   </button>
-
-                  <button
-                    onClick={shareToDribbble}
-                    className="flex items-center gap-2 bg-slate-100 dark:bg-slate-900/50 hover:bg-pink-600 text-slate-600 dark:text-gray-300 hover:text-white px-2 py-2 rounded-lg transition-all border border-slate-200 dark:border-blue-500/20 hover:border-pink-600 dark:hover:border-pink-600/50"
-                  >
-                    <Dribbble className="w-4 h-4" />
-                    <span className="text-sm font-semibold">Dribbble</span>
+                  <button onClick={shareToInstagram} className="flex items-center justify-center gap-2 bg-pink-500/10 hover:bg-pink-600 text-pink-600 hover:text-white px-4 py-2.5 rounded-xl transition-all font-semibold text-sm">
+                    <Instagram className="w-4 h-4" /> Instagram
                   </button>
-
-                  <button
-                    onClick={shareToInstagram}
-                    className="flex items-center gap-2 bg-slate-100 dark:bg-slate-900/50 hover:bg-purple-600 text-slate-600 dark:text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-slate-200 dark:border-blue-500/20 hover:border-purple-600 dark:hover:border-purple-600/50"
-                  >
-                    <Instagram className="w-3 h-3" />
-                    <span className="text-sm font-semibold">Insta</span>
+                  <button onClick={shareToDribbble} className="flex items-center justify-center gap-2 bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white px-4 py-2.5 rounded-xl transition-all font-semibold text-sm hidden sm:flex">
+                    <Dribbble className="w-4 h-4" /> Dribbble
                   </button>
-
-                  <button
-                    onClick={copyToClipboard}
-                    className="flex items-center gap-2 bg-slate-100 dark:bg-slate-900/50 hover:bg-cyan-600 text-slate-600 dark:text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-all border border-slate-200 dark:border-blue-500/20 hover:border-cyan-500 dark:hover:border-cyan-500/50 flex-1 sm:flex-none"
-                  >
-                    {copied ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
-                    <span className="text-sm font-semibold">{copied ? 'Copied!' : 'Copy Link'}</span>
+                  <button onClick={copyToClipboard} className="col-span-2 sm:col-span-1 flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2.5 rounded-xl transition-all font-semibold text-sm">
+                    {copied ? <Check className="w-4 h-4 text-green-500" /> : <Link2 className="w-4 h-4" />}
+                    {copied ? 'Copied!' : 'Copy Link'}
                   </button>
-
-                  <div className="hidden sm:block flex-1 bg-slate-100 dark:bg-slate-900/30 px-4 py-2 rounded-lg border border-slate-200 dark:border-blue-500/10">
-                    <p className="text-xs text-slate-500 dark:text-gray-500 truncate">{getTruncatedUrl()}</p>
-                  </div>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-8 border-t border-slate-200 dark:border-slate-700">
+              {/* Previous / Next Navigation */}
+              <div className="grid sm:grid-cols-2 gap-4">
                 {previousArticle ? (
                   <button
                     onClick={() => onNavigate('article', previousArticle.slug)}
-                    className="group flex items-center gap-3 flex-1 bg-white dark:bg-slate-900/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-xl p-6 border border-slate-200 dark:border-blue-500/20 hover:border-blue-400 dark:hover:border-blue-500/50 transition-all shadow-sm"
+                    className="group relative flex flex-col p-6 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-300 dark:hover:border-blue-500/30 transition-all text-left overflow-hidden"
                   >
-                    <ChevronLeft className="w-6 h-6 text-slate-400 dark:text-blue-400 group-hover:-translate-x-1 transition-transform flex-shrink-0" />
-                    <div className="text-left">
-                      <p className="text-sm text-slate-500 dark:text-gray-500 mb-1">Previous Article</p>
-                      <p className="text-slate-900 dark:text-white font-semibold group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
-                        {previousArticle.title}
-                      </p>
-                    </div>
+                     <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
+                     <div className="flex items-center gap-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
+                       <ChevronLeft className="w-3 h-3" /> Previous
+                     </div>
+                     <h4 className="text-slate-900 dark:text-white font-bold group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+                       {previousArticle.title}
+                     </h4>
                   </button>
-                ) : (
-                  <div className="flex-1 hidden sm:block"></div>
-                )}
+                ) : <div />}
 
                 {nextArticle ? (
                   <button
                     onClick={() => onNavigate('article', nextArticle.slug)}
-                    className="group flex items-center gap-3 flex-1 bg-white dark:bg-slate-900/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-xl p-6 border border-slate-200 dark:border-blue-500/20 hover:border-blue-400 dark:hover:border-blue-500/50 transition-all shadow-sm"
+                    className="group relative flex flex-col p-6 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-300 dark:hover:border-blue-500/30 transition-all text-right overflow-hidden items-end"
                   >
-                    <div className="flex-1 text-left sm:text-right">
-                      <p className="text-sm text-slate-500 dark:text-gray-500 mb-1">Next Article</p>
-                      <p className="text-slate-900 dark:text-white font-semibold group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
-                        {nextArticle.title}
-                      </p>
-                    </div>
-                    <ChevronRight className="w-6 h-6 text-slate-400 dark:text-blue-400 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+                     <div className="absolute top-0 right-0 w-1 h-full bg-blue-500 transform translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
+                     <div className="flex items-center gap-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
+                       Next <ChevronRight className="w-3 h-3" />
+                     </div>
+                     <h4 className="text-slate-900 dark:text-white font-bold group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+                       {nextArticle.title}
+                     </h4>
                   </button>
-                ) : (
-                  <div className="flex-1 hidden sm:block"></div>
-                )}
+                ) : <div />}
               </div>
             </div>
           </div>
