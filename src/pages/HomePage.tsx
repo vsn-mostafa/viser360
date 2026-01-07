@@ -68,8 +68,13 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
   const recentArticles = articles.slice(5, 8); // 3 Grid items
   const mainArticles = articles.slice(8); // List items
 
+  // YouTube Video Configuration
+  const videoId = "mdgSZr9IFdY"; // আপনার দেওয়া ভিডিও আইডি
+  // Autoplay, Mute (বাধ্যতামূলক autoplay এর জন্য), Loop, No Controls setup
+  const youtubeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&enablejsapi=1`;
+
   return (
-    <div className="min-h-screen pt-16 bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+    <div className="min-h-screen pt-16 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         
         {/* --- Breaking News Ticker --- */}
@@ -87,26 +92,32 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
           {/* Right: Widgets Column */}
           <div className="flex flex-col gap-6 h-auto lg:h-[500px]">
             
-            {/* Video Widget (Optimized for Smooth Playback) */}
+            {/* Video Widget (YouTube Updated) */}
             <div className="relative h-[240px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 bg-black group">
-              {/* FIXED: 
-                1. Added 'background=1' param (Removing controls logic heavily reduces lag)
-                2. Added 'pointer-events-none' to prevent hover calculations causing stutter
-                3. Adjusted scale slightly for better coverage
+              {/* CSS Tricks Explained for "Seamless" Look:
+                1. pointer-events-none: ইউজার ক্লিক বা পজ করতে পারবে না।
+                2. scale-[1.35]: ভিডিও জুম করে টাইটেল বার এবং ইউটিউব লোগো ফ্রেমের বাইরে ফেলে দেওয়া হয়েছে।
               */}
-              <iframe
-                src="https://player.vimeo.com/video/1081235250?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1"
-                className="absolute top-1/2 left-1/2 w-[140%] h-[140%] -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-90 transition-opacity duration-700"
-                frameBorder="0"
-                allow="autoplay; fullscreen; picture-in-picture"
-                title="Featured Video"
-              ></iframe>
+              <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+                <iframe
+                  src={youtubeUrl}
+                  className="absolute top-1/2 left-1/2 w-full h-[300%] -translate-x-1/2 -translate-y-1/2 object-cover scale-[1.35]"
+                  allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title="Featured Video"
+                  style={{ border: 'none' }}
+                ></iframe>
+              </div>
 
-              {/* Gradient Overlay for better text contrast if you add text later, adds depth */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+              {/* Overlay for aesthetic and ensuring clicks go through if needed (or just darkening) */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 z-10"></div>
               
-              {/* Clean frame overlay */}
-              <div className="absolute inset-0 pointer-events-none rounded-2xl ring-1 ring-black/20 dark:ring-white/10"></div>
+              {/* Optional: Label (Remove if you want purely video) */}
+              <div className="absolute bottom-4 left-4 z-20">
+                <span className="px-2 py-1 bg-red-600 text-white text-[10px] font-bold uppercase tracking-wider rounded">
+                  Live
+                </span>
+              </div>
             </div>
 
             {/* Search Widget - Fills remaining height on desktop */}
@@ -245,7 +256,7 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
                       
                       {/* Arrow Icon (Desktop Only) */}
                       <div className="hidden md:flex items-center justify-center w-12 border-l border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/10 transition-colors">
-                         <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors -ml-1 group-hover:ml-0" />
+                          <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors -ml-1 group-hover:ml-0" />
                       </div>
                     </div>
                   </div>
