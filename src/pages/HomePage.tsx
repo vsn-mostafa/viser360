@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { articles } from '../data/articles';
 import { getAuthorById, getCategoryById } from '../data/articles';
 import { initializeArticleViews, getAllArticleViews } from '../lib/viewCounter';
-import { Calendar, Eye, TrendingUp, Clock, ArrowRight, PlayCircle } from 'lucide-react';
+import { Calendar, Eye, TrendingUp, Clock, ArrowRight } from 'lucide-react';
 import BreakingNewsTicker from '../components/BreakingNewsTicker';
 import FeaturedSlider from '../components/FeaturedSlider';
 import FollowUs from '../components/FollowUs';
@@ -86,18 +86,20 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
 
           {/* Right: Widgets Column */}
           <div className="flex flex-col gap-6 h-auto lg:h-[500px]">
-            {/* Video Widget */}
-            <div className="relative h-[240px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 bg-black group">
+            
+            {/* Video Widget (Updated) */}
+            <div className="relative h-[240px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 bg-black">
               <iframe
                 src="https://player.vimeo.com/video/1081235250?autoplay=1&muted=1&loop=1&controls=0&title=0&byline=0&portrait=0&badge=0&autopause=0"
+                className="absolute top-1/2 left-1/2 w-[120%] h-[120%] -translate-x-1/2 -translate-y-1/2"
                 frameBorder="0"
                 allow="autoplay; fullscreen; picture-in-picture"
-                referrerPolicy="strict-origin-when-cross-origin"
-                className="w-full h-full"
+                playsInline
                 title="Featured Video"
               ></iframe>
-              {/* Overlay for aesthetic (optional, disappears on play interaction usually handled by iframe) */}
-              <div className="absolute inset-0 pointer-events-none border-4 border-slate-800/20 rounded-2xl"></div>
+
+              {/* Optional clean frame overlay */}
+              <div className="absolute inset-0 pointer-events-none rounded-2xl ring-1 ring-black/20"></div>
             </div>
 
             {/* Search Widget - Fills remaining height on desktop */}
