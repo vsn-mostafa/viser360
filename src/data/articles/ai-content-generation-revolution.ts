@@ -57,7 +57,7 @@ The future isn't AI versus humans—it's **humans and AI working together** to c
 
 Explore AI content tools at [visernic.com/ai-tools](https://visernic.com/ai-tools).`,
   excerpt: 'AI-generated content now comprises 30% of digital media as machine learning transforms creative industries, improving productivity by 35-55% while raising important ethical questions.',
-  cover_image: '/images/ai-future.svg',
+  cover_image: '/images/pwa-apps.svg',
   author_id: '1',
   category_id: '3',
   published: true,
