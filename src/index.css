@@ -160,6 +160,14 @@
     }
   }
 
+  @keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+.animate-shimmer {
+  animation: shimmer 3s infinite linear;
+}
+
   .animate-gradient {
     background-size: 200% 200%;
     animation: gradient 3s ease infinite;
