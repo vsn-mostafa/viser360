@@ -16,9 +16,8 @@ const SearchResultsPage = lazy(() => import('./pages/SearchResultsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 // --- Preloader Component (Splash Screen) ---
-// Z-index increased to 100 to ensure it covers Navigation (z-50) and everything else
 const Preloader = () => (
-  <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-950 text-white transition-opacity duration-500">
+  <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950 text-white">
     <div className="relative flex items-center justify-center">
       {/* Animated Rings */}
       <div className="absolute w-32 h-32 border-4 border-blue-500/20 rounded-full animate-[spin_3s_linear_infinite]"></div>
@@ -103,13 +102,13 @@ function App() {
     return 'home';
   };
 
+  // Show Preloader strictly for the first 2 seconds
+  if (showSplash) {
+    return <Preloader />;
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300 flex flex-col">
-      {/* পরিবর্তন: আগে এখানে 'if (showSplash) return <Preloader />' ছিল, যা অ্যাপ লোড হতে বাধা দিত।
-        এখন Preloader টি অ্যাপের সাথেই রেন্ডার হচ্ছে, ফলে ব্যাকগ্রাউন্ডে লিংকগুলো তৈরি হয়ে যায়।
-      */}
-      {showSplash && <Preloader />}
-
       <TechGridBackground />
       <Navigation currentPage={getCurrentPage()} onNavigate={handleNavigate} />
       
