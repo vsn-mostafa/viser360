@@ -64,7 +64,7 @@ The tech industry's sustainability transformation proves that **economic growth 
 
 Learn about sustainable tech at [visernic.com/sustainability](https://visernic.com/sustainability).`,
   excerpt: 'Tech industry reaches 60% renewable energy milestone for data centers, preventing 180 million tons of CO2 emissions through green computing innovations.',
-  cover_image: '/images/ai-future.svg',
+  cover_image: '/images/pwa-apps.svg',
   author_id: '1',
   category_id: '1',
   published: true,
