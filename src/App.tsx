@@ -16,8 +16,9 @@ const SearchResultsPage = lazy(() => import('./pages/SearchResultsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 // --- Preloader Component (Splash Screen) ---
+// Updated z-index to 100 to ensure it covers the Navigation bar (z-50)
 const Preloader = () => (
-  <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950 text-white">
+  <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-950 text-white transition-opacity duration-500">
     <div className="relative flex items-center justify-center">
       {/* Animated Rings */}
       <div className="absolute w-32 h-32 border-4 border-blue-500/20 rounded-full animate-[spin_3s_linear_infinite]"></div>
@@ -102,13 +103,14 @@ function App() {
     return 'home';
   };
 
-  // Show Preloader strictly for the first 2 seconds
-  if (showSplash) {
-    return <Preloader />;
-  }
-
   return (
     <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300 flex flex-col">
+      {/* Preloader is now conditionally rendered HERE instead of blocking the whole app.
+        This allows SEO crawlers to read the main content (links) immediately 
+        even while the splash screen is visible to the user.
+      */}
+      {showSplash && <Preloader />}
+
       <TechGridBackground />
       <Navigation currentPage={getCurrentPage()} onNavigate={handleNavigate} />
       
