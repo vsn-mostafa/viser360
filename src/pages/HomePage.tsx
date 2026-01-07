@@ -89,9 +89,9 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
             {/* Video Widget */}
             <div className="relative h-[240px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 bg-black group">
               <iframe
-                src="https://player.vimeo.com/video/1081235250?badge=0&autopause=0&player_id=0&app_id=58479"
+                src="https://player.vimeo.com/video/1081235250?autoplay=1&muted=1&loop=1&controls=0&title=0&byline=0&portrait=0&badge=0&autopause=0"
                 frameBorder="0"
-                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                allow="autoplay; fullscreen; picture-in-picture"
                 referrerPolicy="strict-origin-when-cross-origin"
                 className="w-full h-full"
                 title="Featured Video"
