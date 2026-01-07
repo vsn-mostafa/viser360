@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { articles } from '../data/articles';
 import { getAuthorById, getCategoryById } from '../data/articles';
 import { initializeArticleViews, getAllArticleViews } from '../lib/viewCounter';
@@ -7,6 +7,28 @@ import BreakingNewsTicker from '../components/BreakingNewsTicker';
 import FeaturedSlider from '../components/FeaturedSlider';
 import FollowUs from '../components/FollowUs';
 import SearchWidget from '../components/SearchWidget';
+
+// --- Specialized Video Component to prevent Re-renders (Fixes Lag) ---
+const VideoWidget = memo(() => {
+  return (
+    <div className="relative h-[240px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 bg-black group transform-gpu">
+      <iframe
+        src="https://player.vimeo.com/video/1081235250?autoplay=1&muted=1&loop=1&background=1&app_id=122963"
+        className="absolute top-1/2 left-1/2 w-[115%] h-[115%] -translate-x-1/2 -translate-y-1/2 pointer-events-none will-change-transform"
+        frameBorder="0"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowFullScreen
+        title="Featured Video"
+        loading="lazy" // Improves initial page load performance
+      ></iframe>
+      
+      {/* Overlay to prevent interaction and smooth out visuals */}
+      <div className="absolute inset-0 z-10 bg-black/5 pointer-events-none rounded-2xl ring-1 ring-black/20"></div>
+    </div>
+  );
+});
+
+VideoWidget.displayName = 'VideoWidget';
 
 interface HomePageProps {
   onNavigate: (page: string, articleSlug?: string) => void;
@@ -21,6 +43,8 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
     // Initialize views
     const articleIds = articles.map(a => a.id);
     initializeArticleViews(articleIds);
+    
+    // Fetch views immediately
     const views = getAllArticleViews();
     setViewsMap(views);
 
@@ -87,20 +111,8 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
           {/* Right: Widgets Column */}
           <div className="flex flex-col gap-6 h-auto lg:h-[500px]">
             
-            {/* Video Widget (Updated) */}
-            <div className="relative h-[240px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 bg-black">
-              <iframe
-                src="https://player.vimeo.com/video/1081235250?autoplay=1&muted=1&loop=1&controls=0&title=0&byline=0&portrait=0&badge=0&autopause=0"
-                className="absolute top-1/2 left-1/2 w-[110%] h-[120%] -translate-x-1/2 -translate-y-1/2"
-                frameBorder="0"
-                allow="autoplay; fullscreen; picture-in-picture"
-                playsInline
-                title="Featured Video"
-              ></iframe>
-
-              {/* Optional clean frame overlay */}
-              <div className="absolute inset-0 pointer-events-none rounded-2xl ring-1 ring-black/20"></div>
-            </div>
+            {/* Video Widget (Optimized) */}
+            <VideoWidget />
 
             {/* Search Widget - Fills remaining height on desktop */}
             <div className="flex-1 min-h-[140px]">
@@ -238,7 +250,7 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
                       
                       {/* Arrow Icon (Desktop Only) */}
                       <div className="hidden md:flex items-center justify-center w-12 border-l border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/10 transition-colors">
-                         <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors -ml-1 group-hover:ml-0" />
+                          <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors -ml-1 group-hover:ml-0" />
                       </div>
                     </div>
                   </div>
