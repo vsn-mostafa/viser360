@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { 
   ChevronDown, Copy, Check, Quote, Terminal, ImageIcon, 
   ExternalLink, AlertCircle, Info, AlertTriangle, 
@@ -154,7 +154,7 @@ export default function ArticleContent({ content }: ArticleContentProps) {
         const codeId = `code-${partIndex}`;
 
         elements.push(
-          <div key={codeId} className="my-8 rounded-xl overflow-hidden bg-[#1e1e1e] shadow-2xl border border-slate-200 dark:border-blue-500/20 group">
+          <div key={codeId} className="my-8 rounded-xl overflow-hidden bg-[#1e1e1e] shadow-2xl border border-slate-200 dark:border-blue-500/20 group transform translate-z-0">
             <div className="flex items-center justify-between px-4 py-3 bg-[#2a2a2b] border-b border-[#333]">
               <div className="flex items-center gap-2">
                 <div className="flex gap-1.5 mr-2">
@@ -350,8 +350,15 @@ export default function ArticleContent({ content }: ArticleContentProps) {
         if (getYoutubeId(trimmed) && !trimmed.includes(' ')) { 
             const videoId = getYoutubeId(trimmed); 
             elements.push(
-                <div key={uniqueKey} className="my-8 rounded-xl overflow-hidden shadow-2xl bg-black aspect-video relative border border-slate-200 dark:border-slate-700">
-                    <iframe src={`https://www.youtube.com/embed/${videoId}`} title="YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="absolute top-0 left-0 w-full h-full" />
+                <div key={uniqueKey} className="my-8 rounded-xl overflow-hidden shadow-2xl bg-black aspect-video relative border border-slate-200 dark:border-slate-700 transform translate-z-0">
+                    <iframe 
+                      src={`https://www.youtube.com/embed/${videoId}?loading=lazy`} 
+                      title="YouTube Video" 
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                      allowFullScreen 
+                      loading="lazy"
+                      className="absolute top-0 left-0 w-full h-full" 
+                    />
                 </div>
             ); 
             return; 
@@ -361,8 +368,16 @@ export default function ArticleContent({ content }: ArticleContentProps) {
             const videoId = getVimeoId(trimmed); 
             if (videoId) { 
                 elements.push(
-                    <div key={uniqueKey} className="my-8 rounded-xl overflow-hidden shadow-2xl bg-black aspect-video relative border border-slate-200 dark:border-slate-700">
-                        <iframe src={`https://player.vimeo.com/video/${videoId}`} allow="autoplay; fullscreen; picture-in-picture" allowFullScreen className="absolute top-0 left-0 w-full h-full" />
+                    <div key={uniqueKey} className="my-8 rounded-xl overflow-hidden shadow-2xl bg-black aspect-video relative border border-slate-200 dark:border-slate-700 transform translate-z-0">
+                        {/* Improved Vimeo Embed for Performance */}
+                        <iframe 
+                          src={`https://player.vimeo.com/video/${videoId}?badge=0&autopause=0&player_id=0&app_id=58479&dnt=1`} 
+                          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" 
+                          allowFullScreen 
+                          loading="lazy"
+                          className="absolute top-0 left-0 w-full h-full" 
+                          title="Vimeo Video"
+                        />
                     </div>
                 ); 
                 return; 
@@ -563,5 +578,5 @@ export default function ArticleContent({ content }: ArticleContentProps) {
     return text;
   };
 
-  return <div className="prose prose-slate dark:prose-invert prose-lg max-w-none prose-headings:scroll-mt-20 prose-a:no-underline">{parseContent()}</div>;
+  return useMemo(() => <div className="prose prose-slate dark:prose-invert prose-lg max-w-none prose-headings:scroll-mt-20 prose-a:no-underline">{parseContent()}</div>, [content, openFaqIndex, copiedCodeIndex, copiedTextId, visibleSpoilers, playingAudio]);
 }
