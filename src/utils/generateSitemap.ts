@@ -7,7 +7,7 @@ export interface SitemapURL {
   priority: number;
 }
 
-export function generateSitemap(baseUrl: string = 'https://viser360.com'): string {
+export function generateSitemap(baseUrl: string = 'https://viser360.vercel.app'): string {
   const urls: SitemapURL[] = [];
 
   urls.push({
