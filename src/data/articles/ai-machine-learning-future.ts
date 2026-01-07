@@ -12,7 +12,7 @@ But with great power comes great responsibility. As AI systems become more sophi
 
 The future of AI is bright, but it requires careful consideration of both its potential and its pitfalls. Companies investing in AI need to prioritize transparency, ethics, and human oversight to ensure these powerful tools benefit everyone.`,
   excerpt: 'Discover how artificial intelligence and machine learning are revolutionizing various industries and what it means for the future of technology.',
-  cover_image: '/images/ai-future.svg',
+  cover_image: '/images/pwa-apps.svg',
   author_id: '1',
   category_id: '1',
   published: true,
