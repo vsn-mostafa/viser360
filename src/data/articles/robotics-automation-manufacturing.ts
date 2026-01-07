@@ -46,7 +46,7 @@ Industries beyond manufacturingâ€”including healthcare, agriculture, and retailâ
 
 Explore automation solutions at [visernic.com/robotics](https://visernic.com/robotics).`,
   excerpt: '3 million collaborative robots boost manufacturing productivity by 25-35% while reducing defects by 90% and improving worker safety through human-robot collaboration.',
-  cover_image: '/images/ai-future.svg',
+  cover_image: '/images/pwa-apps.svg',
   author_id: '1',
   category_id: '1',
   published: true,
