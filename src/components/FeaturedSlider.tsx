@@ -60,12 +60,12 @@ export default function FeaturedSlider({ articles, onNavigate, viewsMap }: Featu
             <img
             src={currentArticle.cover_image}
             alt={currentArticle.title}
-            className="w-full h-full object-cover transition-transform duration-[2000ms] ease-out group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-[1900ms] ease-out group-hover:scale-110"
             loading="lazy"
             />
             {/* Gradient Overlays for Readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent opacity-90 sm:opacity-80"></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/100 to-transparent opacity-50 sm:opacity-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/20 via-transparent to-transparent"></div>
         </div>
 
         {/* Category Badge - Mobile Optimized */}
