@@ -234,7 +234,7 @@ Track our journey visually:
 :::`,
 
   excerpt: 'Experience the new Visernic platform featuring video embeds, live code playgrounds, and interactive elements designed for developers.',
-  cover_image: '/images/visernic-banner.svg', 
+  cover_image: '/images/pwa-apps.svg', 
   author_id: '1',
   category_id: '7',
   published: true,
