@@ -15,19 +15,19 @@ export function generateArticleSchema(article: Article, views: number, author: a
     "author": {
       "@type": "Person",
       "name": author?.name || "Viser360 Team",
-      "url": "https://viser360.com"
+      "url": "https://viser360.vercel.app"
     },
     "publisher": {
       "@type": "Organization",
       "name": "Viser360",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://viser360.com/logo.png"
+        "url": "https://viser360.vercel.app/logo.svg"
       }
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `https://viser360.com/article/${article.slug}`
+      "@id": `https://viser360.vercel.app/article/${article.slug}`
     },
     "articleSection": category?.name,
     "aggregateRating": {
