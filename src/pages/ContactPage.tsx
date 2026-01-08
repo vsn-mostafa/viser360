@@ -1,31 +1,89 @@
 import { useState } from 'react';
-import { Mail, MapPin, Phone, Send, MessageSquare, Clock, CheckCircle } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import emailjs from '@emailjs/browser';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faEnvelope, 
+  faLocationDot, 
+  faPhone, 
+  faPaperPlane, 
+  faMessage, 
+  faClock, 
+  faCheckCircle, 
+  faCircleExclamation,
+  faNewspaper,
+  faHandshake,
+  faScrewdriverWrench
+} from '@fortawesome/free-solid-svg-icons';
+
+// Zod Validation Schema
+const contactSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters long" }),
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  subject: z.string().min(5, { message: "Subject must be at least 5 characters long" }),
+  message: z.string().min(10, { message: "Message must be at least 10 characters long" }),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  });
   const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    // Simulate network request
-    setTimeout(() => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+    },
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
+    setSubmitError(null);
+    
+    try {
+      const serviceId = 'service_pbvvnak';
+      const templateId = 'template_nv6lk8n';
+      const publicKey = 'fFBTCyL4_pCmDIfX7';
+
+      const templateParams = {
+        name: data.name,
+        email: data.email,
+        subject: data.subject,
+        title: data.subject,
+        message: data.message,
+      };
+
+      await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        publicKey
+      );
+
       setSubmitted(true);
-      setIsSubmitting(false);
-      setFormData({ name: '', email: '', subject: '', message: '' });
+      reset();
+      
       setTimeout(() => setSubmitted(false), 5000);
-    }, 1500);
+
+    } catch (error: any) {
+      console.error('Failed to send email:', error);
+      setSubmitError('Failed to send message. Please try again later.');
+    }
   };
 
   const contactInfo = [
     {
-      icon: Mail,
+      icon: faEnvelope,
       title: 'Email',
       value: 'mostafa@visernic.com',
       link: 'mailto:mostafa@visernic.com',
@@ -34,7 +92,7 @@ export default function ContactPage() {
       bg: 'bg-blue-500/10'
     },
     {
-      icon: MapPin,
+      icon: faLocationDot,
       title: 'Location',
       value: 'Global Coverage',
       link: null,
@@ -43,7 +101,7 @@ export default function ContactPage() {
       bg: 'bg-cyan-500/10'
     },
     {
-      icon: Phone,
+      icon: faPhone,
       title: 'Support',
       value: '24/7 Available',
       link: null,
@@ -60,7 +118,7 @@ export default function ContactPage() {
         {/* Header Section */}
         <div className="text-center mb-16 animate-fade-in">
           <div className="inline-flex items-center justify-center space-x-2 mb-4 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20">
-            <MessageSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <FontAwesomeIcon icon={faMessage} className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span className="text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-widest">
               Get In Touch
             </span>
@@ -76,14 +134,13 @@ export default function ContactPage() {
         {/* Contact Info Cards */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-16">
           {contactInfo.map((info, index) => {
-            const Icon = info.icon;
             return (
               <div
                 key={index}
                 className="group bg-white dark:bg-slate-800/50 backdrop-blur-md rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
               >
                 <div className={`w-14 h-14 ${info.bg} rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className={`w-7 h-7 ${info.color}`} />
+                  <FontAwesomeIcon icon={info.icon} className={`w-7 h-7 ${info.color}`} />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 text-center">{info.title}</h3>
                 <p className="text-slate-500 dark:text-slate-400 text-sm mb-4 text-center">{info.desc}</p>
@@ -115,15 +172,30 @@ export default function ContactPage() {
             {submitted ? (
               <div className="bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/30 rounded-xl p-8 text-center animate-fade-in">
                 <div className="w-20 h-20 bg-green-100 dark:bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
+                  <FontAwesomeIcon icon={faCheckCircle} className="w-10 h-10 text-green-600 dark:text-green-400" />
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Message Sent!</h3>
                 <p className="text-slate-600 dark:text-gray-300">
                   Thank you for reaching out. We have received your message and will respond as soon as possible.
                 </p>
+                <button 
+                  onClick={() => setSubmitted(false)}
+                  className="mt-6 text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+                >
+                  Send another message
+                </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                
+                {/* General Error Message */}
+                {submitError && (
+                  <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-center space-x-3">
+                    <FontAwesomeIcon icon={faCircleExclamation} className="w-5 h-5 text-red-600 dark:text-red-400" />
+                    <p className="text-sm text-red-600 dark:text-red-400">{submitError}</p>
+                  </div>
+                )}
+
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
@@ -131,12 +203,17 @@ export default function ContactPage() {
                     </label>
                     <input
                       type="text"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      required
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
+                      {...register("name")}
+                      className={`w-full bg-slate-50 dark:bg-slate-900/50 border rounded-xl px-4 py-3.5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all ${
+                        errors.name 
+                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' 
+                          : 'border-slate-200 dark:border-slate-700'
+                      }`}
                       placeholder="John Doe"
                     />
+                    {errors.name && (
+                      <p className="mt-1 text-xs text-red-500 font-medium">{errors.name.message}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
@@ -144,12 +221,17 @@ export default function ContactPage() {
                     </label>
                     <input
                       type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      required
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
+                      {...register("email")}
+                      className={`w-full bg-slate-50 dark:bg-slate-900/50 border rounded-xl px-4 py-3.5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all ${
+                        errors.email 
+                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' 
+                          : 'border-slate-200 dark:border-slate-700'
+                      }`}
                       placeholder="john@example.com"
                     />
+                    {errors.email && (
+                      <p className="mt-1 text-xs text-red-500 font-medium">{errors.email.message}</p>
+                    )}
                   </div>
                 </div>
 
@@ -159,12 +241,17 @@ export default function ContactPage() {
                   </label>
                   <input
                     type="text"
-                    value={formData.subject}
-                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    required
-                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
+                    {...register("subject")}
+                    className={`w-full bg-slate-50 dark:bg-slate-900/50 border rounded-xl px-4 py-3.5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all ${
+                      errors.subject 
+                        ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' 
+                        : 'border-slate-200 dark:border-slate-700'
+                    }`}
                     placeholder="How can we help?"
                   />
+                   {errors.subject && (
+                      <p className="mt-1 text-xs text-red-500 font-medium">{errors.subject.message}</p>
+                    )}
                 </div>
 
                 <div>
@@ -172,13 +259,18 @@ export default function ContactPage() {
                     Message
                   </label>
                   <textarea
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    required
+                    {...register("message")}
                     rows={5}
-                    className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3.5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all resize-none"
+                    className={`w-full bg-slate-50 dark:bg-slate-900/50 border rounded-xl px-4 py-3.5 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all resize-none ${
+                      errors.message 
+                        ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' 
+                        : 'border-slate-200 dark:border-slate-700'
+                    }`}
                     placeholder="Tell us more about your inquiry..."
                   />
+                  {errors.message && (
+                      <p className="mt-1 text-xs text-red-500 font-medium">{errors.message.message}</p>
+                    )}
                 </div>
 
                 <button
@@ -187,10 +279,13 @@ export default function ContactPage() {
                   className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform hover:-translate-y-0.5 transition-all flex items-center justify-center space-x-2 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Sending...</span>
+                    </>
                   ) : (
                     <>
-                      <Send className="w-5 h-5" />
+                      <FontAwesomeIcon icon={faPaperPlane} className="w-5 h-5" />
                       <span>Send Message</span>
                     </>
                   )}
@@ -206,7 +301,7 @@ export default function ContactPage() {
               <ul className="space-y-6">
                 <li className="flex items-start space-x-4">
                   <div className="w-8 h-8 bg-blue-100 dark:bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                    <div className="w-2.5 h-2.5 bg-blue-600 dark:bg-blue-400 rounded-full animate-pulse"></div>
+                    <FontAwesomeIcon icon={faNewspaper} className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
                     <h4 className="text-slate-900 dark:text-white font-bold text-lg mb-1">Story Submissions</h4>
@@ -217,7 +312,7 @@ export default function ContactPage() {
                 </li>
                 <li className="flex items-start space-x-4">
                   <div className="w-8 h-8 bg-purple-100 dark:bg-purple-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                    <div className="w-2.5 h-2.5 bg-purple-600 dark:bg-purple-400 rounded-full"></div>
+                    <FontAwesomeIcon icon={faHandshake} className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div>
                     <h4 className="text-slate-900 dark:text-white font-bold text-lg mb-1">Partnership Opportunities</h4>
@@ -228,7 +323,7 @@ export default function ContactPage() {
                 </li>
                 <li className="flex items-start space-x-4">
                   <div className="w-8 h-8 bg-cyan-100 dark:bg-cyan-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                    <div className="w-2.5 h-2.5 bg-cyan-600 dark:bg-cyan-400 rounded-full"></div>
+                    <FontAwesomeIcon icon={faScrewdriverWrench} className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                   </div>
                   <div>
                     <h4 className="text-slate-900 dark:text-white font-bold text-lg mb-1">Technical Support</h4>
@@ -250,7 +345,7 @@ export default function ContactPage() {
                   We value your time. Our dedicated support team typically responds to all inquiries within 24-48 hours.
                 </p>
                 <div className="flex items-center space-x-3 bg-white/20 backdrop-blur-sm rounded-lg p-3 inline-flex border border-white/10">
-                  <Clock className="w-5 h-5 text-white" />
+                  <FontAwesomeIcon icon={faClock} className="w-5 h-5 text-white" />
                   <span className="font-semibold text-sm">Avg. Response: &lt; 24 Hours</span>
                 </div>
               </div>
