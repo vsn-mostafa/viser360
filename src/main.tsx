@@ -8,8 +8,9 @@ import './index.css';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </HelmetProvider>
   </StrictMode>
 );
