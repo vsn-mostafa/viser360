@@ -1,18 +1,19 @@
 import { useState } from 'react';
+import { useTheme } from '../hooks/useTheme';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBars,
+import { 
+  faHome, 
+  faFolderOpen, 
+  faBookOpen, 
+  faInfoCircle, 
+  faEnvelope, 
+  faSun, 
+  faMoon, 
+  faBars, 
   faTimes,
-  faHome,
-  faBookOpen,
-  faFolderOpen,
-  faInfoCircle,
-  faEnvelope,
-  faSun,
-  faMoon
+  faBookReader
 } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../hooks/useTheme';
 
 interface NavigationProps {
   currentPage: string;
@@ -32,65 +33,64 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-blue-500/20 transition-all duration-300">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-blue-500/20 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           
-          {/* --- Logo Section --- */}
+          {/* Logo Section */}
           <div
-            className="flex items-center space-x-3 cursor-pointer group"
+            className="flex items-center space-x-3 cursor-pointer group select-none"
             onClick={() => onNavigate('home')}
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-lg flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-blue-500/20">
-              <FontAwesomeIcon icon={faBookOpen} className="text-white text-lg" />
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-blue-500/30 shadow-lg transform group-hover:scale-105 transition-transform duration-300">
+              <FontAwesomeIcon icon={faBookReader} className="text-white text-lg" />
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent tracking-tight">
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent tracking-tight">
               Viser360
             </span>
           </div>
 
-          {/* --- Desktop Menu --- */}
-          <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 font-medium text-sm ${
+                className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   currentPage === item.id
-                    ? 'bg-blue-500/10 text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.15)] border border-blue-500/20'
-                    : 'text-gray-400 hover:text-blue-400 hover:bg-white/5'
+                    ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.15)]'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }`}
               >
-                <FontAwesomeIcon icon={item.icon} className="text-xs" />
+                <FontAwesomeIcon icon={item.icon} className={currentPage === item.id ? 'animate-pulse' : ''} />
                 <span>{item.label}</span>
               </button>
             ))}
 
-            <div className="h-6 w-px bg-slate-700 mx-2" />
-
             {/* Theme Toggle (Desktop) */}
-            <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-lg text-gray-400 hover:text-yellow-400 hover:bg-white/5 transition-all duration-300 transform hover:rotate-12"
-              aria-label="Toggle theme"
-            >
-              <FontAwesomeIcon icon={theme === 'dark' ? faSun : faMoon} className="text-lg" />
-            </button>
+            <div className="pl-2 ml-2 border-l border-gray-700">
+              <button
+                onClick={toggleTheme}
+                className="p-2.5 rounded-full text-gray-400 hover:text-yellow-400 hover:bg-white/5 transition-all duration-300 transform hover:rotate-12"
+                aria-label="Toggle theme"
+              >
+                <FontAwesomeIcon icon={theme === 'dark' ? faSun : faMoon} className="text-lg" />
+              </button>
+            </div>
           </div>
 
-          {/* --- Mobile Controls --- */}
+          {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-3">
-             <button
+            <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg text-gray-400 hover:text-yellow-400 hover:bg-white/5 transition-all"
+              className="p-2 rounded-lg text-gray-400 hover:text-yellow-400 hover:bg-white/5 transition-colors"
             >
               <FontAwesomeIcon icon={theme === 'dark' ? faSun : faMoon} className="text-lg" />
             </button>
             
             <button
-              className="p-2 text-gray-300 hover:text-blue-400 transition-colors focus:outline-none active:scale-95"
+              className="p-2 text-gray-300 hover:text-white transition-colors relative"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
             >
               <FontAwesomeIcon icon={mobileMenuOpen ? faTimes : faBars} className="text-xl" />
             </button>
@@ -98,14 +98,14 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
         </div>
       </div>
 
-      {/* --- Mobile Menu Dropdown (Animated) --- */}
+      {/* Mobile Menu Dropdown (Animated) */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
             className="md:hidden bg-slate-900/95 backdrop-blur-xl border-t border-blue-500/20 overflow-hidden"
           >
             <div className="px-4 py-6 space-y-3">
@@ -114,23 +114,23 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
                   key={item.id}
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: index * 0.05, duration: 0.2 }}
+                  transition={{ delay: index * 0.1 }}
                   onClick={() => {
                     onNavigate(item.id);
                     setMobileMenuOpen(false);
                   }}
-                  className={`flex items-center space-x-4 w-full px-4 py-3.5 rounded-xl transition-all duration-200 border ${
+                  className={`flex items-center w-full space-x-4 px-5 py-4 rounded-xl transition-all duration-300 ${
                     currentPage === item.id
-                      ? 'bg-gradient-to-r from-blue-600/20 to-cyan-600/10 text-blue-400 border-blue-500/30 shadow-sm'
-                      : 'text-gray-400 hover:bg-white/5 border-transparent hover:text-blue-300'
+                      ? 'bg-gradient-to-r from-blue-600/20 to-cyan-600/10 text-blue-400 border border-blue-500/20'
+                      : 'text-gray-400 hover:bg-white/5 hover:text-white'
                   }`}
                 >
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-                      currentPage === item.id ? 'bg-blue-500/20' : 'bg-slate-800'
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    currentPage === item.id ? 'bg-blue-500/20' : 'bg-gray-800'
                   }`}>
-                    <FontAwesomeIcon icon={item.icon} className="text-sm" />
+                    <FontAwesomeIcon icon={item.icon} className={currentPage === item.id ? 'text-blue-400' : 'text-gray-500'} />
                   </div>
-                  <span className="font-medium text-base">{item.label}</span>
+                  <span className="font-semibold text-lg">{item.label}</span>
                 </motion.button>
               ))}
             </div>
