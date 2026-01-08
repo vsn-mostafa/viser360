@@ -1,9 +1,9 @@
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState, lazy, Suspense } from 'react';
-import { AnimatePresence, motion } from 'framer-motion'; // For Animations
-import { HelmetProvider } from 'react-helmet-async'; // For SEO
-import { SkeletonTheme } from 'react-loading-skeleton'; // For Loading States
-import 'react-loading-skeleton/dist/skeleton.css'; // Skeleton CSS
+import { HelmetProvider } from 'react-helmet-async';
+import { AnimatePresence, motion } from 'framer-motion';
+import { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import TechGridBackground from './components/TechGridBackground';
 import Navigation from './components/Navigation';
@@ -20,12 +20,11 @@ const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 const SearchResultsPage = lazy(() => import('./pages/SearchResultsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
-// --- Preloader Component (Splash Screen) ---
+// --- Preloader Component (Splash Screen with Framer Motion) ---
 const Preloader = () => (
-  <motion.div 
+  <motion.div
     initial={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 0.5 }}
+    exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
     className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950 text-white"
   >
     <div className="relative flex items-center justify-center">
@@ -63,19 +62,6 @@ const PageLoader = () => (
   </div>
 );
 
-// --- Page Animation Wrapper (Reusable) ---
-const PageWrapper = ({ children }: { children: React.ReactNode }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 15 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -15 }}
-    transition={{ duration: 0.3, ease: "easeInOut" }}
-    className="w-full"
-  >
-    {children}
-  </motion.div>
-);
-
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -90,9 +76,11 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Optimized Smooth Scroll to Top on Route Change
+  // Optimized Smooth Scroll
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' }); // 'instant' prevents laggy scroll animation on page load
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }, [location.pathname]);
 
   const handleNavigate = (page: string, articleSlug?: string) => {
@@ -123,38 +111,34 @@ function App() {
     return 'home';
   };
 
-  // Show Preloader strictly for the first 2 seconds
-  if (showSplash) {
-    return (
-      <AnimatePresence>
-        <Preloader />
-      </AnimatePresence>
-    );
-  }
-
   return (
     <HelmetProvider>
+      {/* SkeletonTheme sets global styles for loading skeletons to match dark theme */}
       <SkeletonTheme baseColor="#1e293b" highlightColor="#334155">
-        <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300 flex flex-col font-sans">
+        <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300 flex flex-col">
+          
+          {/* AnimatePresence allows the Preloader to fade out smoothly while the app is already mounted */}
+          <AnimatePresence>
+            {showSplash && <Preloader key="preloader" />}
+          </AnimatePresence>
+
           <TechGridBackground />
           <Navigation currentPage={getCurrentPage()} onNavigate={handleNavigate} />
           
           <main className="relative z-10 flex-grow">
             <Suspense fallback={<PageLoader />}>
-              <AnimatePresence mode="wait">
-                <Routes location={location} key={location.pathname}>
-                  <Route path="/" element={<PageWrapper><HomePage onNavigate={handleNavigate} onSearch={handleSearch} /></PageWrapper>} />
-                  <Route path="/article/:slug" element={<PageWrapper><ArticlePage onNavigate={handleNavigate} /></PageWrapper>} />
-                  <Route path="/search" element={<PageWrapper><SearchResultsPage onNavigate={handleNavigate} /></PageWrapper>} />
-                  <Route path="/categories" element={<PageWrapper><CategoriesPage onNavigate={handleNavigate} /></PageWrapper>} />
-                  <Route path="/faq" element={<PageWrapper><FAQPage onNavigate={handleNavigate} /></PageWrapper>} />
-                  <Route path="/about" element={<PageWrapper><AboutPage onNavigate={handleNavigate} /></PageWrapper>} />
-                  <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
-                  <Route path="/terms" element={<PageWrapper><TermsPage onNavigate={handleNavigate} /></PageWrapper>} />
-                  <Route path="/privacy" element={<PageWrapper><PrivacyPage onNavigate={handleNavigate} /></PageWrapper>} />
-                  <Route path="*" element={<PageWrapper><NotFoundPage onNavigate={handleNavigate} /></PageWrapper>} />
-                </Routes>
-              </AnimatePresence>
+              <Routes>
+                <Route path="/" element={<HomePage onNavigate={handleNavigate} onSearch={handleSearch} />} />
+                <Route path="/article/:slug" element={<ArticlePage onNavigate={handleNavigate} />} />
+                <Route path="/search" element={<SearchResultsPage onNavigate={handleNavigate} />} />
+                <Route path="/categories" element={<CategoriesPage onNavigate={handleNavigate} />} />
+                <Route path="/faq" element={<FAQPage onNavigate={handleNavigate} />} />
+                <Route path="/about" element={<AboutPage onNavigate={handleNavigate} />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/terms" element={<TermsPage onNavigate={handleNavigate} />} />
+                <Route path="/privacy" element={<PrivacyPage onNavigate={handleNavigate} />} />
+                <Route path="*" element={<NotFoundPage onNavigate={handleNavigate} />} />
+              </Routes>
             </Suspense>
           </main>
 
