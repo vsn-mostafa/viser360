@@ -4,6 +4,7 @@ import { articles } from '../data/articles';
 import { getAuthorById, getCategoryById } from '../data/articles';
 import { initializeArticleViews, getAllArticleViews } from '../lib/viewCounter';
 import { Calendar, Eye, Search, ArrowLeft } from 'lucide-react';
+import md5 from 'md5';
 
 interface SearchResultsPageProps {
   onNavigate: (page: string, articleSlug?: string) => void;
@@ -34,7 +35,7 @@ export default function SearchResultsPage({ onNavigate }: SearchResultsPageProps
   };
 
   const getGravatarUrl = (email: string) => {
-    const hash = email.trim().toLowerCase();
+    const hash = md5(email.trim().toLowerCase());
     return `https://www.gravatar.com/avatar/${hash}?d=identicon&s=200`;
   };
 
