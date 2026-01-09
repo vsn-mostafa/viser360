@@ -1,5 +1,6 @@
 import { Zap, Target, Users, Award, BookOpen, Code2, BadgeCheck, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
+import md5 from 'md5';
 
 interface AboutPageProps {
   onNavigate?: (page: string) => void;
@@ -35,7 +36,7 @@ export default function AboutPage({ onNavigate }: AboutPageProps = { onNavigate:
     }
   ];
   const getGravatarUrl = (email: string) => {
-    const hash = email.trim().toLowerCase();
+    const hash = md5(email.trim().toLowerCase());
     return `https://www.gravatar.com/avatar/${hash}?d=identicon&s=400`;
   };
 
