@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, Calendar, Eye, ArrowRight } from 'lucide-react';
 import { Article } from '../data/articles';
 import { getAuthorById, getCategoryById } from '../data/articles';
+import md5 from 'md5';
 
 interface FeaturedSliderProps {
   articles: Article[];
@@ -38,7 +39,7 @@ export default function FeaturedSlider({ articles, onNavigate, viewsMap }: Featu
   };
 
   const getGravatarUrl = (email: string) => {
-    const hash = email.trim().toLowerCase();
+    const hash = md5(email.trim().toLowerCase());
     return `https://www.gravatar.com/avatar/${hash}?d=identicon&s=200`;
   };
 
