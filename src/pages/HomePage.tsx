@@ -8,6 +8,7 @@ import FeaturedSlider from '../components/FeaturedSlider';
 import FollowUs from '../components/FollowUs';
 import SearchWidget from '../components/SearchWidget';
 import SEO from '../components/SEO'; // Import SEO Component
+import md5 from 'md5';
 
 interface HomePageProps {
   onNavigate: (page: string, articleSlug?: string) => void;
@@ -46,7 +47,7 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
   };
 
   const getGravatarUrl = (email: string) => {
-    const hash = email.trim().toLowerCase();
+    const hash = md5(email.trim().toLowerCase());
     return `https://www.gravatar.com/avatar/${hash}?d=identicon&s=200`;
   };
 

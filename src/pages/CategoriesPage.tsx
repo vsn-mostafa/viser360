@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { categories } from '../data/categories';
 import { articles, getArticlesByCategory, getAuthorById, Article } from '../data/articles';
 import { FolderOpen, FileText, ArrowRight } from 'lucide-react';
+import md5 from 'md5';
 
 interface CategoriesPageProps {
   onNavigate: (page: string, articleSlug?: string) => void;
@@ -42,7 +43,7 @@ export default function CategoriesPage({ onNavigate }: CategoriesPageProps) {
   }, [selectedCategory]);
 
   const getGravatarUrl = (email: string) => {
-    const hash = email.trim().toLowerCase();
+    const hash = md5(email.trim().toLowerCase());
     return `https://www.gravatar.com/avatar/${hash}?d=identicon&s=200`;
   };
 

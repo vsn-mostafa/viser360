@@ -13,6 +13,7 @@ import { updateArticleViews } from '../lib/viewCounter';
 import { Calendar, Eye, ArrowLeft, MessageCircle, Send, ChevronLeft, ChevronRight, Share2, Facebook, Dribbble, Twitter, Instagram, Linkedin, Link2, Check } from 'lucide-react';
 import ArticleContent from '../components/ArticleContent';
 import { generateArticleSchema } from '../utils/schemaGenerator';
+import md5 from 'md5';
 
 interface ArticlePageProps {
   onNavigate: (page: string, articleSlug?: string) => void;
@@ -148,7 +149,7 @@ export default function ArticlePage({ onNavigate }: ArticlePageProps) {
   };
 
   const getGravatarUrl = (email: string) => {
-    const hash = email.trim().toLowerCase();
+    const hash = md5(email.trim().toLowerCase());
     return `https://www.gravatar.com/avatar/${hash}?d=identicon&s=200`;
   };
 
