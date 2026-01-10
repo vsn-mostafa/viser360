@@ -1,0 +1,52 @@
+/* Visernic Print Optimization */
+@media print {
+  /* পেজের ব্যাকগ্রাউন্ড সাদা এবং টেক্সট কালো করা */
+  body, #root, .dark, .light {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    background-image: none !important;
+  }
+
+  /* সব এলিমেন্টের শ্যাডো এবং বর্ডার ইফেক্ট রিমুভ করা */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+  }
+
+  /* টেক্সট কালার সলিড ব্ল্যাক করা */
+  h1, h2, h3, h4, h5, h6, p, span, div, li, td, th {
+    color: #000000 !important;
+    fill: #000000 !important; /* SVG এর জন্য */
+  }
+
+  /* লিংক এর নিচে আন্ডারলাইন দেওয়া */
+  a {
+    text-decoration: underline;
+    color: #000000 !important;
+  }
+
+  /* Navbar, Footer, বা বাটন হাইড করা (প্রিন্টে দরকার নেই) */
+  nav, footer, button, .no-print, [role="button"] {
+    display: none !important;
+  }
+
+  /* লেআউট অ্যাডজাস্টমেন্ট */
+  .container, .wrapper {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* ইমেজ অপ্টিমাইজেশন */
+  img {
+    max-width: 100% !important;
+    filter: grayscale(100%); /* কালি বাঁচাতে সাদা-কালো ছবি */
+  }
+  
+  /* পেজ ব্রেক ম্যানেজমেন্ট */
+  pre, blockquote, .card {
+    page-break-inside: avoid;
+  }
+}
