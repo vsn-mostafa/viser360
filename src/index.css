@@ -11,6 +11,7 @@
     @apply antialiased;
   }
 
+  /* Dark Mode Styles */
   .dark {
     background: #020617;
   }
@@ -19,6 +20,7 @@
     background: #020617;
   }
 
+  /* Light Mode Styles */
   .light {
     background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 50%, #ffffff 100%);
   }
@@ -185,65 +187,107 @@
 }
 
 /* =========================================
-   PRINT STYLES (Fixes Printability Issues)
+   PRINT FRIENDLY CSS - SEO FIX
    ========================================= */
 @media print {
-  /* Hide navigation, buttons, and decorative elements */
+  /* 1. Hide Non-Essential Elements */
   nav,
   header,
   footer,
+  aside,
   button,
   iframe,
   .no-print,
+  [role="banner"],
+  [role="navigation"],
+  [role="complementary"],
   .breaking-news-ticker,
   .search-widget,
-  [role="banner"],
-  [role="navigation"] {
+  .social-share,
+  .sidebar,
+  .ad-container {
     display: none !important;
   }
 
-  /* Reset body background and text color for paper */
+  /* 2. Page Setup */
+  @page {
+    margin: 2cm;
+    size: auto;
+  }
+
+  /* 3. Reset Colors for Readability (Save Ink) */
   body, 
-  .dark body,
-  .light body {
+  .dark,
+  .light,
+  #root {
     background: white !important;
     background-color: white !important;
     color: black !important;
+    font-family: serif !important;
     font-size: 12pt !important;
+    line-height: 1.5 !important;
   }
 
-  /* Force all text to be black and backgrounds transparent */
+  /* 4. Text and Content Optimization */
   * {
     background: transparent !important;
     color: black !important;
     box-shadow: none !important;
     text-shadow: none !important;
+    filter: none !important;
   }
 
-  /* Ensure main content takes full width */
-  main,
-  .container,
-  .max-w-7xl {
+  /* 5. Typography Fixes */
+  h1, h2, h3, h4, h5, h6 {
+    color: black !important;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  p, ul, ol {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* 6. Link Handling (Show URLs) */
+  a {
+    text-decoration: underline !important;
+    color: black !important;
+  }
+  
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+  }
+  
+  /* Don't show links for internal hashes or javascript */
+  a[href^="#"]:after,
+  a[href^="javascript"]:after {
+    content: "";
+  }
+
+  /* 7. Image Optimization */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    border: 0 !important;
+  }
+
+  /* 8. Layout Adjustments */
+  main, .container, .max-w-7xl {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
+    float: none !important;
   }
 
-  /* Improve link readability in print */
-  a {
-    text-decoration: underline;
-    color: black !important;
-  }
-  
-  /* Prevent page breaks inside images and headings */
-  img, h1, h2, h3, h4, h5, h6 {
+  /* 9. Pre/Code Blocks */
+  pre, blockquote {
+    border: 1px solid #999;
     page-break-inside: avoid;
     break-inside: avoid;
-  }
-
-  /* Hide scrollbars */
-  ::-webkit-scrollbar {
-    display: none;
   }
 }
