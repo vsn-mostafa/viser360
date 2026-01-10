@@ -11,7 +11,6 @@
     @apply antialiased;
   }
 
-  /* Dark Mode Styles */
   .dark {
     background: #020617;
   }
@@ -20,7 +19,6 @@
     background: #020617;
   }
 
-  /* Light Mode Styles */
   .light {
     background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 50%, #ffffff 100%);
   }
@@ -166,7 +164,6 @@
     0% { left: -100%; }
     100% { left: 200%; }
   }
-  
   .animate-shimmer {
     animation: shimmer 3s infinite linear;
   }
@@ -187,107 +184,51 @@
 }
 
 /* =========================================
-   PRINT FRIENDLY CSS - SEO FIX
+   SEO & Print Optimization (Added for Visernic)
    ========================================= */
 @media print {
-  /* 1. Hide Non-Essential Elements */
-  nav,
-  header,
-  footer,
-  aside,
-  button,
-  iframe,
-  .no-print,
-  [role="banner"],
-  [role="navigation"],
-  [role="complementary"],
-  .breaking-news-ticker,
-  .search-widget,
-  .social-share,
-  .sidebar,
-  .ad-container {
-    display: none !important;
+  /* সব কালার সাদা-কালো করা হচ্ছে প্রিন্টার এর কালি বাচানোর জন্য */
+  body, .dark, .light, .dark body, .light body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    background-image: none !important;
   }
 
-  /* 2. Page Setup */
-  @page {
-    margin: 2cm;
-    size: auto;
-  }
-
-  /* 3. Reset Colors for Readability (Save Ink) */
-  body, 
-  .dark,
-  .light,
-  #root {
-    background: white !important;
-    background-color: white !important;
-    color: black !important;
-    font-family: serif !important;
-    font-size: 12pt !important;
-    line-height: 1.5 !important;
-  }
-
-  /* 4. Text and Content Optimization */
-  * {
-    background: transparent !important;
-    color: black !important;
+  /* শ্যাডো এবং বর্ডার ইফেক্ট রিমুভ করা হচ্ছে প্রিন্টের জন্য */
+  *, .light .shadow-lg, .light .shadow-xl, .light .bg-slate-900 {
     box-shadow: none !important;
     text-shadow: none !important;
     filter: none !important;
   }
 
-  /* 5. Typography Fixes */
-  h1, h2, h3, h4, h5, h6 {
-    color: black !important;
-    page-break-after: avoid;
-    break-after: avoid;
+  /* টেক্সট কালার ব্ল্যাক নিশ্চিত করা */
+  h1, h2, h3, h4, h5, h6, p, span, div, li, a {
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact;
   }
 
-  p, ul, ol {
-    orphans: 3;
-    widows: 3;
-  }
-
-  /* 6. Link Handling (Show URLs) */
+  /* লিংক এর নিচে আন্ডারলাইন দেওয়া যাতে প্রিন্টে বোঝা যায় */
   a {
-    text-decoration: underline !important;
-    color: black !important;
-  }
-  
-  a[href^="http"]:after {
-    content: " (" attr(href) ")";
-    font-size: 0.8em;
-  }
-  
-  /* Don't show links for internal hashes or javascript */
-  a[href^="#"]:after,
-  a[href^="javascript"]:after {
-    content: "";
+    text-decoration: underline;
+    color: #000000 !important;
   }
 
-  /* 7. Image Optimization */
-  img {
-    max-width: 100% !important;
-    height: auto !important;
+  /* অপ্রয়োজনীয় এলিমেন্ট হাইড করার জন্য ক্লাস */
+  /* React কম্পোনেন্টে <Navbar className="print:hidden" /> ব্যবহার করবেন */
+  .no-print {
+    display: none !important;
+  }
+
+  /* পেজ ব্রেক ম্যানেজমেন্ট */
+  pre, blockquote {
     page-break-inside: avoid;
-    break-inside: avoid;
-    border: 0 !important;
   }
-
-  /* 8. Layout Adjustments */
-  main, .container, .max-w-7xl {
+  
+  /* কন্টেন্ট ফুল উইডথ করা */
+  .container, .max-w-7xl, .w-full {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    float: none !important;
-  }
-
-  /* 9. Pre/Code Blocks */
-  pre, blockquote {
-    border: 1px solid #999;
-    page-break-inside: avoid;
-    break-inside: avoid;
   }
 }
