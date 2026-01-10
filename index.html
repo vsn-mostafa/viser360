@@ -1,6 +1,24 @@
 <!doctype html>
 <html lang="en">
   <head>
+
+    <script>
+  (function() {
+    try {
+      var localTheme = localStorage.getItem('theme');
+      var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (localTheme === 'dark' || (!localTheme && supportDarkMode)) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      } else {
+        document.documentElement.classList.add('light');
+        document.documentElement.classList.remove('dark');
+      }
+    } catch (e) {}
+  })();
+</script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#2563eb" />
