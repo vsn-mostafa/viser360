@@ -161,12 +161,13 @@
   }
 
   @keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 200%; }
-}
-.animate-shimmer {
-  animation: shimmer 3s infinite linear;
-}
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 3s infinite linear;
+  }
 
   .animate-gradient {
     background-size: 200% 200%;
@@ -180,5 +181,69 @@
     50% {
       background-position: 100% 50%;
     }
+  }
+}
+
+/* =========================================
+   PRINT STYLES (Fixes Printability Issues)
+   ========================================= */
+@media print {
+  /* Hide navigation, buttons, and decorative elements */
+  nav,
+  header,
+  footer,
+  button,
+  iframe,
+  .no-print,
+  .breaking-news-ticker,
+  .search-widget,
+  [role="banner"],
+  [role="navigation"] {
+    display: none !important;
+  }
+
+  /* Reset body background and text color for paper */
+  body, 
+  .dark body,
+  .light body {
+    background: white !important;
+    background-color: white !important;
+    color: black !important;
+    font-size: 12pt !important;
+  }
+
+  /* Force all text to be black and backgrounds transparent */
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Ensure main content takes full width */
+  main,
+  .container,
+  .max-w-7xl {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Improve link readability in print */
+  a {
+    text-decoration: underline;
+    color: black !important;
+  }
+  
+  /* Prevent page breaks inside images and headings */
+  img, h1, h2, h3, h4, h5, h6 {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Hide scrollbars */
+  ::-webkit-scrollbar {
+    display: none;
   }
 }
