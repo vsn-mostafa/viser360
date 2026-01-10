@@ -7,7 +7,7 @@ import BreakingNewsTicker from '../components/BreakingNewsTicker';
 import FeaturedSlider from '../components/FeaturedSlider';
 import FollowUs from '../components/FollowUs';
 import SearchWidget from '../components/SearchWidget';
-import SEO from '../components/SEO';
+import SEO from '../components/SEO'; 
 import md5 from 'md5';
 
 interface HomePageProps {
@@ -16,15 +16,22 @@ interface HomePageProps {
 }
 
 export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
-  // Removed global loading state to allow Bots to see content immediately
+  const [loading, setLoading] = useState(true);
   const [viewsMap, setViewsMap] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    // Initialize views without blocking the UI
+    // Initialize views
     const articleIds = articles.map(a => a.id);
     initializeArticleViews(articleIds);
     const views = getAllArticleViews();
     setViewsMap(views);
+
+    // Simulate fast loading for smooth transition
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const getViews = (articleId: string) => {
@@ -44,63 +51,54 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
     return `https://www.gravatar.com/avatar/${hash}?d=identicon&s=200`;
   };
 
+  // Helper function to handle link clicks without page reload
   const handleArticleClick = (e: MouseEvent, slug: string) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent full page reload
     onNavigate('article', slug);
   };
 
-  // Schema for the Homepage (WebSite)
-  const homeSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Viser360",
-    "url": "https://viser360.vercel.app",
-    "description": "Latest Technology News, AI, Web3, and Innovation Insights",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://viser360.vercel.app/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Viser360",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://viser360.vercel.app/logo.svg"
-      }
-    }
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+        <div className="relative">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-600 font-bold text-xs">
+            V360
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-  // Sorting Articles
+  // Sorting and Slicing Articles
   const popularArticles = [...articles].sort((a, b) => getViews(b.id) - getViews(a.id)).slice(0, 5);
   const featuredArticles = articles.slice(0, 5);
-  const recentArticles = articles.slice(5, 8);
-  const mainArticles = articles.slice(8);
+  const recentArticles = articles.slice(5, 8); // 3 Grid items
+  const mainArticles = articles.slice(8); // List items
 
   return (
     <div className="min-h-screen pt-16 bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-      {/* SEO Meta Tags - Always Rendered */}
-      <SEO schema={homeSchema} /> 
-
-      {/* H1 Tag - Must be present in the DOM immediately.
-        Using 'sr-only' makes it visible to bots/screen readers but hidden from visual design.
-      */}
-      <h1 className="sr-only">
-        Viser360 - Latest Technology News, Artificial Intelligence, Web3, and Future Innovations
-      </h1>
+      {/* SEO Component Added Here */}
+      <SEO /> 
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         
+        {/* --- Breaking News Ticker --- */}
         <div className="mb-6 sm:mb-8 animate-fade-in">
           <BreakingNewsTicker />
         </div>
 
+        {/* --- Hero Section (Slider + Video/Search) --- */}
         <div className="grid lg:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-12">
+          {/* Left: Featured Slider */}
           <div className="lg:col-span-2 h-[400px] sm:h-[500px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800">
             <FeaturedSlider articles={featuredArticles} onNavigate={onNavigate} viewsMap={viewsMap} />
           </div>
 
+          {/* Right: Widgets Column */}
           <div className="flex flex-col gap-6 h-auto lg:h-[500px]">
+            
+            {/* Video Widget (Updated) */}
             <div className="relative h-[240px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800 bg-black">
               <iframe
                 src="https://player.vimeo.com/video/1081235250?autoplay=1&muted=1&loop=1&controls=0&title=0&byline=0&portrait=0&badge=0&autopause=0"
@@ -108,11 +106,14 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
                 frameBorder="0"
                 allow="autoplay; fullscreen; picture-in-picture"
                 playsInline
-                title="Featured Tech Video"
+                title="Featured Video"
               ></iframe>
+
+              {/* Optional clean frame overlay */}
               <div className="absolute inset-0 pointer-events-none rounded-2xl ring-1 ring-black/20"></div>
             </div>
 
+            {/* Search Widget - Fills remaining height on desktop */}
             <div className="flex-1 min-h-[140px]">
               <SearchWidget onSearch={(query) => onSearch?.(query)} />
             </div>
@@ -120,13 +121,14 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
+          {/* --- Main Content Area (Left 2/3) --- */}
           <div className="lg:col-span-2 space-y-10">
             
-            {/* H2 for Latest Stories */}
-            <section aria-labelledby="latest-stories-heading">
+            {/* Latest Stories Grid */}
+            <section>
               <div className="flex items-center gap-3 mb-6">
                 <span className="w-1.5 h-8 bg-gradient-to-b from-blue-600 to-cyan-500 rounded-full"></span>
-                <h2 id="latest-stories-heading" className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
                   Latest Stories
                 </h2>
               </div>
@@ -137,7 +139,6 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
                     key={article.id}
                     href={`/article/${article.slug}`}
                     onClick={(e) => handleArticleClick(e, article.slug)}
-                    aria-label={`Read article: ${article.title}`}
                     className="group block cursor-pointer bg-white dark:bg-slate-900/40 backdrop-blur-md rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500/30 transition-all duration-300 flex flex-col h-full"
                   >
                     <div className="relative h-48 overflow-hidden">
@@ -179,11 +180,11 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
               </div>
             </section>
 
-            {/* H2 for More Articles */}
-            <section aria-labelledby="more-articles-heading">
+            {/* Main Feed List */}
+            <section>
               <div className="flex items-center gap-3 mb-6">
                 <span className="w-1.5 h-8 bg-gradient-to-b from-blue-600 to-cyan-500 rounded-full"></span>
-                <h2 id="more-articles-heading" className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
                   More Articles
                 </h2>
               </div>
@@ -194,10 +195,10 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
                     key={article.id}
                     href={`/article/${article.slug}`}
                     onClick={(e) => handleArticleClick(e, article.slug)}
-                    aria-label={`Read full article: ${article.title}`}
                     className="group block cursor-pointer bg-white dark:bg-slate-900/40 backdrop-blur-md rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-slate-200 dark:border-slate-800 hover:border-blue-500/30 transition-all duration-300"
                   >
                     <div className="flex flex-col md:flex-row h-full">
+                      {/* Image Side */}
                       <div className="relative md:w-2/5 h-56 md:h-auto overflow-hidden">
                         <img
                           src={article.cover_image}
@@ -209,6 +210,7 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 md:hidden"></div>
                       </div>
                       
+                      {/* Content Side */}
                       <div className="p-5 sm:p-7 md:w-3/5 flex flex-col justify-center">
                         <div className="flex items-center gap-2 mb-3">
                           {getCategoryById(article.category_id) && (
@@ -247,6 +249,7 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
                         </div>
                       </div>
                       
+                      {/* Arrow Icon (Desktop Only) */}
                       <div className="hidden md:flex items-center justify-center w-12 border-l border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/10 transition-colors">
                           <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-colors -ml-1 group-hover:ml-0" />
                       </div>
@@ -257,14 +260,16 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
             </section>
           </div>
 
+          {/* --- Sidebar (Right 1/3) --- */}
           <div className="space-y-8">
             <div className="sticky top-24 space-y-8">
+              
+              {/* Popular Posts Widget */}
               <div className="bg-white dark:bg-slate-900/40 backdrop-blur-md rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
                 <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
                   <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
                     <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   </div>
-                  {/* H3 for Widget Titles */}
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white">Popular Posts</h3>
                 </div>
                 
@@ -301,6 +306,7 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
                 </div>
               </div>
 
+              {/* Follow Us Widget */}
               <FollowUs />
               
             </div>
