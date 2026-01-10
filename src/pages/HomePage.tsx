@@ -16,20 +16,15 @@ interface HomePageProps {
 }
 
 export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
-  const [loading, setLoading] = useState(true);
+  // Removed global loading state to allow Bots to see content immediately
   const [viewsMap, setViewsMap] = useState<Record<string, number>>({});
 
   useEffect(() => {
+    // Initialize views without blocking the UI
     const articleIds = articles.map(a => a.id);
     initializeArticleViews(articleIds);
     const views = getAllArticleViews();
     setViewsMap(views);
-
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 300);
-
-    return () => clearTimeout(timer);
   }, []);
 
   const getViews = (articleId: string) => {
@@ -76,19 +71,7 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen pt-20 flex items-center justify-center bg-slate-50 dark:bg-slate-950">
-        <div className="relative">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-600 font-bold text-xs">
-            V360
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+  // Sorting Articles
   const popularArticles = [...articles].sort((a, b) => getViews(b.id) - getViews(a.id)).slice(0, 5);
   const featuredArticles = articles.slice(0, 5);
   const recentArticles = articles.slice(5, 8);
@@ -96,9 +79,12 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
 
   return (
     <div className="min-h-screen pt-16 bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+      {/* SEO Meta Tags - Always Rendered */}
       <SEO schema={homeSchema} /> 
 
-      {/* Invisible H1 for SEO Bots */}
+      {/* H1 Tag - Must be present in the DOM immediately.
+        Using 'sr-only' makes it visible to bots/screen readers but hidden from visual design.
+      */}
       <h1 className="sr-only">
         Viser360 - Latest Technology News, Artificial Intelligence, Web3, and Future Innovations
       </h1>
@@ -136,6 +122,7 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-10">
             
+            {/* H2 for Latest Stories */}
             <section aria-labelledby="latest-stories-heading">
               <div className="flex items-center gap-3 mb-6">
                 <span className="w-1.5 h-8 bg-gradient-to-b from-blue-600 to-cyan-500 rounded-full"></span>
@@ -192,6 +179,7 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
               </div>
             </section>
 
+            {/* H2 for More Articles */}
             <section aria-labelledby="more-articles-heading">
               <div className="flex items-center gap-3 mb-6">
                 <span className="w-1.5 h-8 bg-gradient-to-b from-blue-600 to-cyan-500 rounded-full"></span>
@@ -276,6 +264,7 @@ export default function HomePage({ onNavigate, onSearch }: HomePageProps) {
                   <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
                     <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   </div>
+                  {/* H3 for Widget Titles */}
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white">Popular Posts</h3>
                 </div>
                 
