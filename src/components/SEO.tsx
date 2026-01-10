@@ -7,7 +7,6 @@ interface SEOProps {
   ogImage?: string;
   ogType?: string;
   canonicalUrl?: string;
-  schema?: Record<string, any>;
   article?: {
     publishedTime?: string;
     modifiedTime?: string;
@@ -23,20 +22,15 @@ export default function SEO({
   ogImage = '/viser360-og-default.jpg',
   ogType = 'website',
   canonicalUrl,
-  schema,
   article
 }: SEOProps) {
-  // Define the production domain to ensure strict canonicalization (Fixes WWW vs Non-WWW)
-  const siteDomain = 'https://viser360.vercel.app';
-  
-  // Construct absolute URL for canonical tag
-  const currentPath = window.location.pathname;
-  const currentUrl = canonicalUrl || `${siteDomain}${currentPath === '/' ? '' : currentPath}`;
+  const siteUrl = window.location.origin;
+  const currentUrl = canonicalUrl || window.location.href;
   
   // Ensure image URL is absolute
   const fullImageUrl = ogImage.startsWith('http') 
     ? ogImage 
-    : `${siteDomain}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
+    : `${siteUrl}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
 
   return (
     <Helmet>
@@ -53,18 +47,17 @@ export default function SEO({
       <meta property="og:description" content={description} />
       <meta property="og:image" content={fullImageUrl} />
       <meta property="og:site_name" content="Viser360" />
-      <meta property="og:locale" content="en_US" />
 
-      {/* Twitter Card */}
+      {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content="@viser360" />
-      <meta name="twitter:creator" content="@viser360" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImageUrl} />
 
-      {/* Robots Control */}
-      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      {/* Dublin Core (Optional but good for news) */}
+      <meta name="DC.title" content={title} />
+      <meta name="DC.description" content={description} />
+      <meta name="DC.subject" content={keywords.join(', ')} />
 
       {/* Article Specific Metadata */}
       {article && (
@@ -76,13 +69,6 @@ export default function SEO({
             <meta key={tag} property="article:tag" content={tag} />
           ))}
         </>
-      )}
-
-      {/* JSON-LD Schema Injection */}
-      {schema && (
-        <script type="application/ld+json">
-          {JSON.stringify(schema)}
-        </script>
       )}
     </Helmet>
   );
