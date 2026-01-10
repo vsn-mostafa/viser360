@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+  /* Fix */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   * {
     scroll-behavior: smooth;
   }
@@ -13,6 +18,7 @@
 
   .dark {
     background: #020617;
+    color-scheme: dark;
   }
 
   .dark body {
@@ -21,12 +27,14 @@
 
   .light {
     background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 50%, #ffffff 100%);
+    color-scheme: light;
   }
 
   .light body {
     background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 50%, #ffffff 100%);
   }
 
+  /* Adjusted light mode overrides without excessive !important where possible */
   .light .bg-slate-950 {
     background-color: #fafbfc !important;
   }
@@ -39,7 +47,8 @@
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
     border: 1px solid rgba(226, 232, 240, 0.8) !important;
   }
-
+  
+  /* Rest of existing CSS remains same... */
   .light .bg-slate-800,
   .light .bg-slate-800\/50,
   .light .bg-slate-800\/30,
@@ -161,12 +170,12 @@
   }
 
   @keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 200%; }
-}
-.animate-shimmer {
-  animation: shimmer 3s infinite linear;
-}
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+  .animate-shimmer {
+    animation: shimmer 3s infinite linear;
+  }
 
   .animate-gradient {
     background-size: 200% 200%;
