@@ -43,7 +43,7 @@ const Preloader = () => (
     </div>
     <div className="mt-8 flex flex-col items-center gap-2">
       <div className="h-1 w-24 bg-slate-800 rounded-full overflow-hidden">
-        <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 animate-[loading_2s_ease-in-out]"></div>
+        <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 animate-[loading_1s_ease-in-out]"></div>
       </div>
     </div>
     <style>{`
