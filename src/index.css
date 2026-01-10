@@ -161,12 +161,12 @@
   }
 
   @keyframes shimmer {
-    0% { left: -100%; }
-    100% { left: 200%; }
-  }
-  .animate-shimmer {
-    animation: shimmer 3s infinite linear;
-  }
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+.animate-shimmer {
+  animation: shimmer 3s infinite linear;
+}
 
   .animate-gradient {
     background-size: 200% 200%;
@@ -180,55 +180,5 @@
     50% {
       background-position: 100% 50%;
     }
-  }
-}
-
-/* =========================================
-   SEO & Print Optimization (Added for Visernic)
-   ========================================= */
-@media print {
-  /* সব কালার সাদা-কালো করা হচ্ছে প্রিন্টার এর কালি বাচানোর জন্য */
-  body, .dark, .light, .dark body, .light body {
-    background: #ffffff !important;
-    color: #000000 !important;
-    background-image: none !important;
-  }
-
-  /* শ্যাডো এবং বর্ডার ইফেক্ট রিমুভ করা হচ্ছে প্রিন্টের জন্য */
-  *, .light .shadow-lg, .light .shadow-xl, .light .bg-slate-900 {
-    box-shadow: none !important;
-    text-shadow: none !important;
-    filter: none !important;
-  }
-
-  /* টেক্সট কালার ব্ল্যাক নিশ্চিত করা */
-  h1, h2, h3, h4, h5, h6, p, span, div, li, a {
-    color: #000000 !important;
-    -webkit-print-color-adjust: exact;
-  }
-
-  /* লিংক এর নিচে আন্ডারলাইন দেওয়া যাতে প্রিন্টে বোঝা যায় */
-  a {
-    text-decoration: underline;
-    color: #000000 !important;
-  }
-
-  /* অপ্রয়োজনীয় এলিমেন্ট হাইড করার জন্য ক্লাস */
-  /* React কম্পোনেন্টে <Navbar className="print:hidden" /> ব্যবহার করবেন */
-  .no-print {
-    display: none !important;
-  }
-
-  /* পেজ ব্রেক ম্যানেজমেন্ট */
-  pre, blockquote {
-    page-break-inside: avoid;
-  }
-  
-  /* কন্টেন্ট ফুল উইডথ করা */
-  .container, .max-w-7xl, .w-full {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
   }
 }
